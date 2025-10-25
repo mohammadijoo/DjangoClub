@@ -1,0 +1,54 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %} حذف مقاله از بلاگ  {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container" style="direction:rtl !important; text-align: justify !important;">
+    <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">  
+        حذف مقاله از بلاگ
+    </h1>
+    
+    {% if user.is_authenticated and user.username == postfa.author.username %}
+    
+    <h3 class="text-white mt-2 mb-2" style="font-family: 'Sahel', 'Caveat Brush', cursive;">
+          حذف: {{ postfa.title }} 
+    </h3>
+    <br>
+    
+    <div class="form-group" style="direction:rtl !important; text-align: justify !important;">
+        <form method='POST'>
+            {% csrf_token %}
+            <strong> آیا از حذف مقاله مطمئن هستید؟! </strong> <br><br>
+            <button class="btn btn-secondary"> حذف مقاله </button>
+        </form>
+    </div>
+    
+    {% else %}
+    
+        <h1 class="text-white mt-4 mb-4" style="font-family: 'Sahel', 'Caveat Brush', cursive;" > 
+            شما مجاز به حذف مقاله نیستید!
+        </h1>
+    
+    {% endif %}
+    
+    
+    
+</div>
+
+
+{% endblock %}
+
+
+

@@ -1,0 +1,55 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Comment on Blog Post   {% endblock %}
+
+
+
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+        Add Blog Post
+    </h1>
+    <br>
+    
+    {% if user.is_authenticated  %}
+    
+    
+            <div class="form-group">
+                <form method='POST'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    <button class="btn btn-secondary"> Add Comment </button>
+                </form>
+            </div>
+            
+
+    
+    {% else %}
+    
+        <h1 class="text-white mt-4 mb-4"> 
+            You Are not Authenticated to Add Comments! 
+        </h1>
+    
+    {% endif %}
+    
+    
+</div>
+
+
+
+
+
+{% endblock %}

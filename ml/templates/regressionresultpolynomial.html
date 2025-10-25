@@ -1,0 +1,52 @@
+{% extends "portfolio/base-en.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row">
+        
+        <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            Prediction Results
+        </h1>
+
+            <table class="table text-white">
+                <thead class="text-center">
+                <tr> 
+                <th scope="col">#</th>   
+                <th scope="col">Fixed Acidity</th>
+                <th scope="col">Volatile Acidity</th>
+                <th scope="col"> Citric Acid </th>
+                <th scope="col">Residual Sugar</th>
+                <th scope="col">Chlorides</th>
+                <th scope="col">Free Sulfur Dioxide</th>
+                <th scope="col">Total Sulfur Dioxide</th>
+                <th scope="col">Density</th>
+                <th scope="col">PH</th>
+                <th scope="col">Sulphates</th>
+                <th scope="col">Alcohol</th>
+                <th scope="col">Quality</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.fixed_acidity }}</td>
+                    <td>{{ item.volatile_acidity }}</td>
+                    <td>{{ item.citric_acid }}</td>
+                    <td>{{ item.residual_sugar }}</td>
+                    <td>{{ item.chlorides }}</td>
+                    <td>{{ item.free_sulfur_dioxide }}</td>
+                    <td>{{ item.total_sulfur_dioxide }}</td>
+                    <td>{{ item.density }}</td>
+                    <td>{{ item.pH }}</td>
+                    <td>{{ item.sulphates }}</td>
+                    <td>{{ item.alcohol }}</td>
+                    <td>{{ item.quality }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

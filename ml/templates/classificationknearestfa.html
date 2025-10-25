@@ -1,0 +1,229 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  نتایج پیش بینی: </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="direction:rtl !important; float:right; text-align:justify;">
+                <h5 style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  ورودی های طبقه بندی:  </h5><br><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> دما (K):  <span id="te" style="color:black;"></span></div>   <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">Relative Luminosity: <span id="rl" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">Relative Radius: <span id="rr" style="color:black;"></span></div>  <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">Absolute Magnitude: <span id="am" style="color:black;"></span></div>  <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">General Obs. Color: <span id="co" style="color:black;"></span></div>  <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">SMASS Spec: <span id="ma" style="color:black;"></span></div>  <br>
+                <h5 class="pt-3" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">   نتیجه پیش بینی نوع ستاره: </h5>  <br>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer" style="direction:rtl !important; float:right">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <a class="btn btn-primary" href="{% url 'ml:classificationresultknnfa' %}" role="button">  مشاهده نتایج قبلی  </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3" style="direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:classificationresultknnfa' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    نتایج </a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/stars.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    کد نمونه    </a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/stars.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    دیتاست  </a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1" >
+                دسته بندی ستاره ها
+            </h1>
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                با استفاده از مدل <u>K-Nearest Neighbor</u>
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                پس از تکمیل و ارسال فرم، حداقل 10 ثانیه صبر کنید تا مدل نتایج را محاسبه نموده و نمایش دهد. <br> همچنین، تمام اعداد اعشاری وارد شده باید حداکثر 2 رقم اعشار داشته باشند، مانند: 1.23
+            </h6>
+            
+            <form action="" id="post-form" style="direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="Temperature" style="direction:rtl !important; text-align:justify; float:right">  دما <small class="pr-4" style="color:#BFA181; font-family: 'Sahel', 'BTraffic' !important;;">   (بین 1939 و 40000)  </small> </label> 
+                    <input type="number" step="0.01" class="form-control" id="Temperature" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="L" style="direction:rtl !important; text-align:justify; float:right">  درخشندگی نسبی  <small class="pr-4" style="color:#BFA181;">  (بین 0.00008 و 849420)    </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="L" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="R" style="direction:rtl !important; text-align:justify; float:right">   شعاع نسبی   <small class="pr-4" style="color:#BFA181;">     (بین 0.0084 و 1948.5)       </small> </label> 
+                    <input type="number" step="0.01" class="form-control" id="R" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="A_M" style="direction:rtl !important; text-align:justify; float:right">   بزرگی مطلق  <small class="pr-4" style="color:#BFA181;">       (بین 11.92- و 20.06)      </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="A_M" placeholder="" required> 
+                </div>
+                <div class="form-group">
+                    <label for="Color" style="direction:rtl !important; text-align:justify; float:right">    رنگ های عمومی در OBS  <small class="pr-4" style="color:#BFA181;">   کدهای رنگ ها را در توضیحات پائین صفحه مشاهده نمائید.   </small> </label>
+                    <select name="Color" id="Color" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Spectral_Class" style="direction:rtl !important; text-align:justify; float:right">  مشخصات طیفی <small class="pr-4" style="color:#BFA181;">   کلاس های طیفی را در توضیحات پائین صفحه مشاهده نمائید.   </small></label>
+                    <select name="Spectral_Class" id="Spectral_Class" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">ارسال</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                توضیحات مدل:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                
+                
+                طبقه بندی یک روش یادگیری ماشینی نظارت شده است که در آن مدل سعی می کند برچسب صحیح یک داده ورودی داده شده را پیش بینی کند. یکی از الگوریتم‌هایی که برای طبقه‌بندی استفاده می‌شود، <a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm" target="_blank">“K-Nearest Neighbor Classifier”</a> است. <br>
+                
+                در اینجا، ما از مجموعه داده <b style="color:#6E6E6E"><u>stars.csv</u></b> برای اهداف طبقه بندی استفاده می کنیم و می توانید مجموعه داده را از لینک بالای این صفحه دانلود کنید.  <br>
+                
+                این دیتاست دارای 6 متغیر ویژگی است: <br>
+                
+                “<i style="color:#6ACFC7">Temperature</i>”, “<i style="color:#6ACFC7">Relative Luminosity</i>”, “<i style="color:#6ACFC7">Relative Radius</i>”, “<i style="color:#6ACFC7">Absolute Magnitude</i>”, “<i style="color:#6ACFC7">General Obs. Color</i>”, “<i style="color:#6ACFC7">SMASS Spec</i>” .<br>
+                
+                و متغیر طبقه بندی برای هر مورد در دیتاست، نوع ستاره است که دارای 6 مقدار است: <br>
+                
+                “<i style="color:#6ACFC7">Red Dwarf</i>”, “<i style="color:#6ACFC7">Brown Dwarf</i>”, “<i style="color:#6ACFC7">White Dwarf</i>”, “<i style="color:#6ACFC7">Main Sequence</i>”, “<i style="color:#6ACFC7">Super Giants</i>”, “<i style="color:#6ACFC7">Hyper Giants</i>”. <br>
+                
+                
+                در فرم بالا مقادیر 6 متغیر ویژگی را وارد می کنید و مدل به صورت فرم پاپ آپ نوع ستاره را برمی گرداند. از آنجایی که 2 متغیر ویژگی از دیتاست ما متنی و 4 مورد از آنها عددی است، برای استفاده از K-Nearest Neighbor برای این دیتاست ترکیبی، باید متغیرهای ویژگی متنی را به برچسب های عددی تبدیل کنیم و سپس می توانیم از طبقه بندی K-Nearest Neighbor استفاده کنیم. <br>
+                
+                
+                فرمول "درخشندگی نسبی": L/Lo (Lo = 3.828 x 10<sup>26</sup> وات که معادل میانگین درخشندگی خورشید است.)    <br>
+                
+
+
+                فرمول "شعاع نسبی": R/Ro (Ro = 6.9551 x 10<sup>8</sup> m که معادل میانگین شعاع خورشید است.)    <br>
+                
+                
+                توجه داشته باشید که مقادیر و محدوده های هر متغیر ویژگی به شرح زیر است:  <br>
+                
+                <span class="badge m-2 p-2" style="background-color: #213F99">   دما (بین 1939 و 40000)    </span>   <br>                               
+                <span class="badge m-2 p-2" style="background-color: #213F99">  درخشندگی نسبی (بین 0.00008 و 849420)  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99">  شعاع نسبی (بین 0.0084 و 1948.5)    </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99">   بزرگی مطلق (بین 11.92- و 20.06)   </span>  <br>
+                
+                <span class="badge m-2 p-2 text-right" style="background-color: #213F99; line-height:1.5rem; direction:rtl; "> کدهای رنگ ها: <br>
+                    0 → آبی <br>
+                    1 → آبی-سفید   <br>
+                    2 → نارنجی    <br>
+                    3 → نارنجی-قرمز    <br>
+                    4 → نارنجی-زرد کم رنگ    <br>
+                    5 → قرمز    <br>
+                    6 → سفید    <br>
+                    7 → مایل به سفید     <br>
+                    8 → زرد-سفید    <br>
+                    9 → مایل به زرد  </span>   <br> 
+                
+                
+                <span class="badge m-2 p-2 text-left" style="background-color: #213F99; line-height:1.5rem; direction:ltr;"> کلاس های طیفی: <br> 0 → A , 1 → B ,  2 → F ,  3 → G ,  4 → K , 5 → M ,  6 → O   </span> <br>
+                                      
+                برای اطلاعات بیشتر در مورد کلاس های طیفی، این <a href="https://en.wikipedia.org/wiki/Asteroid_spectral_types" target="_blank"> لینک </a> را مشاهده نمائید. <br>  
+                                          
+                کد نمونه مورد استفاده برای آموزش مدل طبقه بندی “K-Nearest Neighbor” در لینک بالای همین صفحه ارائه شده است. هر بار که این فرم را اجرا می کنید و پیش بینی های طبقه بندی اتفاق می افتد، مقادیر در پایگاه داده ذخیره می شوند و با لینک "نتایج" در بالای این صفحه، نتایج قبلی پیش بینی مدل را مشاهده خواهید کرد. اجرای اخیر شما به انتهای این لیست اضافه خواهد شد.
+
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_classification_knn" %}',
+            data:{
+                Temperature:$('#Temperature').val(),
+                L:$('#L').val(),
+                R:$('#R').val(),
+                A_M:$('#A_M').val(),
+                Color:$('#Color').val(),
+                Spectral_Class:$('#Spectral_Class').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("te").innerHTML = json['Temperature']
+                document.getElementById("rl").innerHTML = json['L']
+                document.getElementById("rr").innerHTML = json['R']
+                document.getElementById("am").innerHTML = json['A_M']
+                document.getElementById("co").innerHTML = json['Color']
+                document.getElementById("ma").innerHTML = json['Spectral_Class']
+            },
+            error : function(xhr,errmsg,err) {
+                alert(err);
+            },
+        });
+    })
+</script>
+
+{% endblock %}
+

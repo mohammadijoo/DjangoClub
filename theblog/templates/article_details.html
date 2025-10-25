@@ -1,0 +1,282 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} {{ post.title_tag }}   {% endblock %}
+
+{% block  metaContent %}  {{ post.meta_tag }}  {% endblock %}
+
+
+{% block  cssStyle %}    
+.myhover:hover {    color: #6B7A8F !important;  }
+.social:hover { color: #c89666 !important;  }
+p { text-align: justify !important; }
+.card-header a {    color: #0f2862 !important;  }
+hr {    border: 0.2px solid #708090;  }
+textarea.form-control { height: 10rem !important;   }
+input.btn-primary { margin-left:2rem !important;   }
+input.btn-secondary { margin-left:1rem !important;   }
+img.me-3 { margin-right:1rem !important;   }
+div.comment { margin-bottom:1rem !important;   }
+a.permalink { visibility: hidden !important;   }
+h1, h2, h3, h4, h5, h6, p {
+    color: white;
+    text-align: justify;
+}
+@media screen and (max-width: 480px) {
+  .myAside {font-size:16px;}
+
+}
+{% endblock %}
+
+
+{% block content %}
+
+{% load static %}
+<!-- for comments -->
+{% load comments %}
+{% load comments_xtd %}
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2" style="margin-left=0px; padding-left:0px">
+            
+            <aside class="pl-2">
+                
+                <a href={% url 'articles_api' %} class="" target="_blank" >
+                    <h5 class=" mb-1 mt-3 pb-1  text-gradient  myAside " style="border-bottom: 2px solid #fff;">
+                        Blog API
+                    </h5> <br>
+                </a>
+                 
+              
+        
+                <a href={% url 'category-list' %} class="mb-5 " target="_blank"> 
+                    <h5 class=" mb-1pb-3  text-gradient  myAside " >
+                        Category 
+                    </h5>
+                </a>
+                
+            </aside>
+            
+            
+            <aside class="pl-2">
+                
+                {% for item in cat_menu %}
+                
+                    {% if item.publish %}
+            
+                        <a href={% url 'category' item|slugify %} class="">
+                            <h6 class="text-white pb-2 myhover" style="border-bottom: 2px solid #2272FF;">
+                                {{ item }}
+                            </h6>
+                        </a> 
+                        
+                    {% endif %}
+            
+                {% endfor %}
+                
+            
+            </aside>
+        </div>
+        
+        <div class="col-9 col-sm-9 col-md-10 col-lg-10 col-xl-10 pr-4">
+
+                <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4"> 
+                    {{ post.title }}
+                </h1>
+                <small> 
+                    By: {{ post.author.first_name }}  {{ post.author.last_name }} 
+                </small> | 
+                <small> 
+                    Date: {{ post.post_date }}  
+                </small> 
+                
+                {% if user.is_authenticated and user.username == post.author.username %}
+                | <small> 
+                    <a href="{% url 'update_post' post.pk %}"> Edit </a> |
+                    <a href="{% url 'delete_post' post.pk %}"> Delete </a>
+                </small> 
+                
+                {% endif %}
+                <br>
+                <hr> <br>
+                <div class="row">
+                    <div class="col-lg-8">
+                        {% if post.header_image %}
+                            <img src="{{ post.header_image.url }}" style="width: 100%; height: auto; " class="img-fluid"> <br><br>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-4">
+                    </div>
+                </div>
+                
+                
+                {{ post.body|safe }}
+                <hr>
+        </div>
+          
+          
+    </div>
+</div>
+
+          
+          
+                
+                 
+                
+            <div class="container">
+                 <br>
+                <div class="row">
+                
+                <div class="col-lg-12">
+                    <form action="{% url 'like_post' post.pk %}" method="POST">
+                        {% csrf_token %}
+                    <span style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem; padding-right:2rem"> Likes </span>
+                    <span style="margin-left:3rem; margin-right:3rem">  {{total_likes}} <i class="fa fa-thumbs-up mt-2" aria-hidden="true" style="font-size:1.5rem; color:white">  </i> </span> 
+                    {% if user.is_authenticated %}  
+                      
+                        {% if liked %}
+                        <!--<i class="fa fa-thumbs-up" aria-hidden="true" style="color:blue">-->
+                        <button type="submit" name="post_id" value={{ post.id }} style="background: none; border: none;font-size:1.4rem;color:#fc4445"><i class="fa fa-thumbs-down" aria-hidden="true" ></i></button>
+                        <!--<i class="fa fa-thumbs-up" aria-hidden="true" style="color:blue">-->
+                        
+                        {% else %}
+                        <button type="submit" name="post_id" value={{ post.id }} style="background: none; border: none;font-size:1.4rem;color:#5680E9"><i class="fa fa-thumbs-up" aria-hidden="true" ></i></button>
+                        <!--<i class="fa fa-thumbs-down" aria-hidden="true" style="color:red">-->
+                        
+                        {% endif %}
+                    
+                    {% else %}
+                        <br>
+                        <small style="color: #beef00">
+                            To Like the Blog Articles, You Need to Login to Django Club!
+                        </small>
+                        <br>
+                    {% endif %}
+                        
+                         
+                         
+                    </form>
+                </div>
+                
+                <br>
+                <div class="col-lg-12">
+                    
+                    <div class="card mt-5">
+                      <h5 class="card-header"> 
+                          <a href="{% url 'show_profile_page' post.author.profile.id %}" target='_blank'>
+                            {{ post.author.first_name }}  {{ post.author.last_name }} 
+                          </a>
+                      </h5>
+                      
+                      <div class="card-body row" style="background: none !important;">
+                          <div class="col-lg-2">
+                              {% if post.author.profile.profile_pic %}
+                              <a href="{% url 'show_profile_page' post.author.profile.id %}" target='_blank'>
+                                <img src="{{ post.author.profile.profile_pic.url }}"  style="max-width:8rem; height:auto" class="rounded-circle">
+                              </a>
+                              {% else %}
+                              <a href="{% url 'show_profile_page' post.author.profile.id %}">
+                                <img src="{% static 'img/default-profile-picture.jpg' %}"  style="max-width:8rem; height:auto" class="rounded-circle">
+                              </a>
+                              {% endif %}
+                          </div>
+                          <div class="col-lg-8">
+                              <h4 class="card-title" style="font-weight:900">Biography</h4>
+                              {% if post.author.profile.bio %}
+                              <h6 class="card-text text-justify" style="color:black;">{{ post.author.profile.bio }}</h6>
+                              {% endif %}
+                              
+                          </div>
+                          <div class="col-lg-2">
+                              <!--<h5 class="card-title text-center" style="font-weight:600">Social Links</h5>-->
+                              <br>
+                              {% if post.author.profile.website_url %}
+                              <a href="{{ post.author.profile.website_url }}" target="_blank"><i class="fa fa-globe p-2 social" aria-hidden="true" style="font-size:2rem; color:#494d5f"></i></a>
+                              {% endif %}
+                              {% if post.author.profile.stackoverflow_url %}
+                              <a href="{{ post.author.profile.stackoverflow_url }}"  target="_blank"><i class="fa fa-stack-overflow p-2 social" aria-hidden="true" style="font-size:2rem; color:#494d5f"></i></a>
+                              {% endif %}
+                              {% if post.author.profile.github_url %}
+                              <a href="{{ post.author.profile.github_url }}" target="_blank"><i class="fa fa-github p-2 social" aria-hidden="true" style="font-size:2rem; color:#494d5f"></i></a>
+                              {% endif %}
+                              {% if post.author.profile.linkedin_url %}
+                              <a href="{{ post.author.profile.linkedin_url }}" target="_blank"><i class="fa fa-linkedin p-2 social" aria-hidden="true" style="font-size:2rem; color:#494d5f"></i></a>
+                              {% endif %}
+                              
+                              {% if post.author.profile.instagram_url %}
+                              <a href="{{ post.author.profile.instagram_url }}" target="_blank"><i class="fa fa-instagram p-2 social" aria-hidden="true" style="font-size:2rem; color:#494d5f"></i></a>
+                              {% endif %}
+                              {% if post.author.profile.twitter_url %}
+                              <a href="{{ post.author.profile.twitter_url }}" target="_blank"><i class="fa fa-twitter p-2 social" aria-hidden="true" style="font-size:2rem; color:#494d5f"></i></a>
+                              {% endif %}
+                          </div>
+                          
+                        
+                      </div>
+                    </div><br><br>
+                    
+                </div>
+                
+                 
+                 
+                 
+                 
+                <div class="col-lg-12">
+                
+                    <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089" class="mb-1"> Comments </h1> 
+                
+              
+                
+                <!-- For Comments - This code will show the NUMBER OF COMMENTS POSTED.  -->
+                {% get_comment_count for object as comment_count %}
+                    <div class="py-4 text-center">
+                   
+                    <!-- Comment count -->
+                   
+                    {{ comment_count }} comment{{ comment_count|pluralize }}
+                    ha{{ comment_count|pluralize:"s,ve"}} been posted.
+                    </div>
+                 
+                    <!-- Posted comment list - This code will show the POSTED COMMENTS -->
+                    {% if comment_count %}
+                        <ul class="media-list shadow p-3 mb-5  rounded container">
+                        {% render_xtdcomment_tree for object %}
+                        </ul>
+                    {% endif %}
+                 
+                    <!-- Post your comment - This code will show the FORM TO POST COMMENTS -->
+                    <div class="comment mt-3 shadow p-3 mb-5  rounded container">
+                        <h3 class="text-center mb-2 text-white">Your comment</h3>
+                        <div class=" pt-4 text-black">
+                            {% render_comment_form for object %}
+                        </div>
+                    </div>
+                
+                
+                </div>
+                
+                
+                
+                <br>
+                
+                <a href="{% url 'theblog'  %}" class=""> 
+                    <i class="fa fa-arrow-left" aria-hidden="true" style="font-size:2.5rem; color:#c5d5cb"></i>
+                </a>
+                
+               
+            </div>    
+        </div>
+                <!--<script>-->
+                <!--    var element1 = document.getElementById("div1");-->
+                <!--    element1.classList.add("otherclass");-->
+                <!--</script>-->
+                
+    
+        
+
+
+{% endblock %}
+
+

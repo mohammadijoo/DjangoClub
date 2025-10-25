@@ -1,0 +1,64 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Create A Blog Post   {% endblock %}
+
+
+
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+        Add Blog Post
+    </h1>
+    <br>
+    
+    {% if user.is_authenticated  %}
+    
+        {% if user.is_superuser or user.is_staff  %}
+    
+            <div class="form-group">
+                <form method='POST' enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form.as_p }}
+                    
+                    {% block  metaContent %}  {{ post.meta_tag }}  {% endblock %}
+                    
+                    <button class="btn btn-secondary"> Add Post </button>
+                </form>
+            </div>
+            
+            <script>
+                var name = "{{ user.id }}";
+                document.getElementById("abc").value = name; 
+            </script>
+            
+        {% endif %}
+    
+    {% else %}
+    
+        <h1 class="text-white mt-4 mb-4"> 
+            You Are not Authenticated to Add Posts! 
+        </h1>
+    
+    {% endif %}
+    
+    
+</div>
+
+
+
+
+
+{% endblock %}

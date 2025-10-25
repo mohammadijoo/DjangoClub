@@ -1,0 +1,61 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %} دسته بندی های بلاگ   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+{% block content %}
+
+
+<div class="container" style="direction:rtl !important; text-align: justify !important;">
+    
+ 
+ {% if category_posts %}
+ 
+    <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+         دسته بندی  {{ cats }}
+    </h1>
+    
+    <ul style="direction:rtl !important; text-align: justify !important;">   
+    
+    {% for post in category_posts %}
+    
+    <li style="text-align:justify">
+        <a href="{% url 'article_detailfa' post.pk %}"> {{ post.title }} </a> | {{ post.author.first_name }} {{ post.author.last_name }} |  {{ post.post_date }} |
+        
+        {% if user.is_authenticated and user.is_superuser %}
+        <small> 
+            <a href="{% url 'update_post' post.pk %}"> ویرایش </a> | 
+            <a href="{% url 'delete_post' post.pk %}"> حذف </a>
+        </small>
+        {% endif %}
+        
+        <br>
+        {{ post.snippet }}
+    </li>
+  
+    {% endfor %}
+
+    </ul>
+
+{% else %}
+
+    <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+        متاسفانه هیچ مقاله ای برای این دسته بندی موجود نیست.
+    </h1>
+
+{% endif %}
+
+        <br><br>
+        <a href="{% url 'category-listfa'  %}" class=""> 
+            <i class="fa fa-arrow-right" aria-hidden="true" style="font-size:2.5rem; color:#c5d5cb"></i>
+        </a>
+    
+
+</div>
+
+
+
+
+
+{% endblock %}

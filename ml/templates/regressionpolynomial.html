@@ -1,0 +1,223 @@
+<h5><mark class="mt-2 p-1">{% extends "portfolio/base-en2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>
+                <div style="color:black;">Fixed Acidity: <span id="fi" style="color:black;"></span></div>    
+                <div style="color:black;">Volatile Acidity: <span id="vo" style="color:black;"></span></div>
+                <div style="color:black;">Citric Acid: <span id="ci" style="color:black;"></span></div>
+                <div style="color:black;">Residual Sugar: <span id="re" style="color:black;"></span></div>
+                <div style="color:black;">Chlorides: <span id="ch" style="color:black;"></span></div>
+                <div style="color:black;">Free Sulfur Dioxide: <span id="fs" style="color:black;"></span></div>
+                <div style="color:black;">Total Sulfur Dioxide: <span id="ts" style="color:black;"></span></div>
+                <div style="color:black;">Density: <span id="de" style="color:black;"></span></div>
+                <div style="color:black;">pH: <span id="p_h" style="color:black;"></span></div>
+                <div style="color:black;">Sulphates: <span id="su" style="color:black;"></span></div>
+                <div style="color:black;">Alcohol: <span id="al" style="color:black;"></span></div>
+                <h5 class="pt-3">Wine Quality Prediction:</h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'ml:regressionresultpolynomial' %}" role="button">View Previous Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:regressionresultpolynomial' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Results</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/Wine_Quality.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Source Code</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/Wine_Quality.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Dataset</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                Wine Quality Prediction
+            </h1>
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                Using <u>Polynomial Regression</u> Model
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                After submitting the form, wait at least <u>10 seconds</u>  for the model to calculate and show the result. <br> Also, all entered float numbers must have at most 2 decimal points, like: 1.23
+            </h6>
+            <form action="" id="post-form" style="color:white">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label   for="fixed_acidity"> Fixed Acidity <small class="pl-4" style="color:#BFA181;">(Between 3.8 and 14.2)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="fixed_acidity" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="volatile_acidity">Volatile Acidity <small class="pl-4" style="color:#BFA181;">(Between 0.08 and 1.1)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="volatile_acidity" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="citric_acid">Citric Acid <small class="pl-4" style="color:#BFA181;">(Between 0 and 1.66)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="citric_acid" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="residual_sugar">Residual Sugar <small class="pl-4" style="color:#BFA181;">(Between 0.6 and 65.8)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="residual_sugar" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="chlorides"> Chlorides <small class="pl-4" style="color:#BFA181;">(Between 0.009 and 0.346)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="chlorides" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="free_sulfur_dioxide"> Free Sulfur Dioxide <small class="pl-4" style="color:#BFA181;">(Between 2 and 289)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="free_sulfur_dioxide" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="total_sulfur_dioxide">Total Sulfur Dioxide <small class="pl-4" style="color:#BFA181;">(Between 9 and 440)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="total_sulfur_dioxide" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="density">Density <small class="pl-4" style="color:#BFA181;">(Between 0.98711 and 1.03898)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="density" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="pH">pH <small class="pl-4" style="color:#BFA181;">(Between 2.72 and 3.82)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="pH" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="sulphates"> Sulphates <small class="pl-4" style="color:#BFA181;">(Between 0.22 and 1.08)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="sulphates" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="alcohol">Alcohol <small class="pl-4" style="color:#BFA181;">(Between 8 and 14.2)</small></label>
+                    <input type="number" step="0.01" class="form-control" id="alcohol" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                Model Description:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify text-white">
+                
+                Regression is a supervised machine learning method for understanding the relationship between independent variables or features and a dependent variable or outcome. One of the algorithms used for regression is the <a href="https://en.wikipedia.org/wiki/Polynomial_regression" target="_blank">“Polynomial Regression”</a>. <br>
+                
+                
+                Here, we use the <b style="color:#6E6E6E"><u>Wine_Quality.csv</u></b> dataset for regression purposes and you can download the dataset from the link on top of this page. This dataset has 11 features: <br>
+                “<i style="color:#6ACFC7">fixed acidity</i>”, “<i style="color:#6ACFC7">volatile acidity</i>”, “<i style="color:#6ACFC7">citric acid</i>”, “<i style="color:#6ACFC7">residual sugar</i>”, 
+                “<i style="color:#6ACFC7">chlorides</i>”, “<i style="color:#6ACFC7">free sulfur dioxide</i>”, “<i style="color:#6ACFC7">total sulfur dioxide</i>”, 
+                “<i style="color:#6ACFC7">density</i>”, “<i style="color:#6ACFC7">pH</i>”, “<i style="color:#6ACFC7">sulphates</i>” and “<i style="color:#6ACFC7">alcohol</i>” <br>
+                And the prediction variable is: “<i style="color:#6ACFC7">Wine Quality</i>”. <br>
+            
+                In the above form, you enter the values of 11 features and the model returns the Wine Quality in a pop-up form. Notice that the values and ranges of each feature are as below:  <br>
+            </p>
+                 
+                <h5><mark class="mt-2 p-1"> 3.8 < Fixed Acidity < 14.2  </mark></h5>                                 
+                <h5><mark class="mt-2 p-1"> 0.08 < Volatile Acidity < 1.1 </mark></h5>
+                <h5><mark class="mt-2 p-1"> 0 < Citric Acid < 1.66  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 0.6 < Residual Sugar < 65.8  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 0.009 < Chlorides < 0.346  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 2 < Free Sulfur Dioxide < 289  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 9 < Total Sulfur Dioxide < 440  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 0.98711 < Density < 1.03898  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 2.72 < pH < 3.82  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 0.22 < Sulphates < 1.08  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 8 < Alcohol < 14.2  </mark></h5>
+                <h5><mark class="mt-2 p-1"> 3 < Wine Quality < 9  </mark></h5>
+                
+            <p style="font-size:1.3rem" class="text-justify text-white">
+                
+                The sample code used to train a “Polynomial Regression” model, is provided in the link on top of this page. Each time you run this form and predictions happen, the values will store in the database, and with the link “result” on top of this page, you will see the previous results of the model prediction. Your recent run will be added to the end of this list.      
+            
+            </p>
+            
+        </div>
+        
+        
+    </div>
+</div>
+
+
+<script>
+$(document).on('submit', '#post-form',function(e){
+    e.preventDefault();
+    $.ajax({
+        type:'POST',
+        url:'{% url "ml:submit_regression_polynomial" %}',
+        data:{
+            fixed_acidity:$('#fixed_acidity').val(),
+            volatile_acidity:$('#volatile_acidity').val(),
+            citric_acid:$('#citric_acid').val(),
+            residual_sugar:$('#residual_sugar').val(),
+            chlorides:$('#chlorides').val(),
+            free_sulfur_dioxide:$('#free_sulfur_dioxide').val(),
+            total_sulfur_dioxide:$('#total_sulfur_dioxide').val(),
+            density:$('#density').val(),
+            pH:$('#pH').val(),
+            sulphates:$('#sulphates').val(),
+            alcohol:$('#alcohol').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success:function(json) {
+            document.forms["post-form"].reset();
+            document.getElementById("prediction").innerHTML = json['result']
+            document.getElementById("fi").innerHTML = json['fixed_acidity']
+            document.getElementById("vo").innerHTML = json['volatile_acidity']
+            document.getElementById("ci").innerHTML = json['citric_acid']
+            document.getElementById("re").innerHTML = json['residual_sugar']
+            document.getElementById("ch").innerHTML = json['chlorides']
+            document.getElementById("fs").innerHTML = json['free_sulfur_dioxide']
+            document.getElementById("ts").innerHTML = json['total_sulfur_dioxide']
+            document.getElementById("de").innerHTML = json['density']
+            document.getElementById("p_h").innerHTML = json['pH']
+            document.getElementById("su").innerHTML = json['sulphates']
+            document.getElementById("al").innerHTML = json['alcohol']
+        },
+        error : function(xhr,errmsg,err) {
+
+        }
+    });
+})
+</script>
+
+
+{% endblock %}
+

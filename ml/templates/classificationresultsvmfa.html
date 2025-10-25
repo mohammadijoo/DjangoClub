@@ -1,0 +1,41 @@
+{% extends "portfolio/base-2.html" %}
+{% block  cssStyle %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container pt-5">
+        <div class="row" style="overflow-x: scroll !important; direction:rtl !important; font-family: 'Sahel';">
+        
+        <h1 style="direction:rtl !important;  font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            نتایج پیش بینی ها
+        </h1>
+
+            <table class="table text-white" style="font-family: 'Sahel';"> 
+                <thead class="text-center" style="direction:rtl !important;  font-family: 'Sahel';">
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">  طول کاسبرگ </th>
+                <th scope="col">  عرض کاسبرگ  </th>
+                <th scope="col">  طول گلبرگ   </th>
+                <th scope="col">   عرض گلبرگ </th>
+                <th scope="col">  نوع گل نیلوفر </th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for data in dataset %}
+                    <tr style="direction:rtl !important;  font-family: 'Sahel';">
+                    <th scope="row">{{ data.id }}</th>
+                    <td>{{ data.sepal_length }}</td>
+                    <td>{{ data.sepal_width }}</td>
+                    <td>{{ data.petal_length }}</td>
+                    <td>{{ data.petal_width }}</td>
+                    <td>{{ data.classification }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

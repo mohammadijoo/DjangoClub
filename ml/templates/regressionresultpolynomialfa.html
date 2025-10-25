@@ -1,0 +1,52 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row" style="direction:rtl !important; font-family: 'Sahel';">
+        
+        <h1 style="direction:rtl !important;  font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            نتایج پیش بینی ها
+        </h1>
+
+            <table class="table text-white" style="font-family: 'Sahel';">
+                <thead class="text-center" style="direction:rtl !important;  font-family: 'Sahel';">
+                <tr> 
+                <th scope="col">#</th>   
+                <th scope="col">اسیدیته ثابت</th>
+                <th scope="col">اسیدیته فرار</th>
+                <th scope="col"> اسید سیتریک </th>
+                <th scope="col"> قند باقیمانده </th>
+                <th scope="col"> کلرایدها </th>
+                <th scope="col"> دی اکسید گوگرد آزاد </th>
+                <th scope="col">  دی اکسید گوگرد کل </th>
+                <th scope="col">چگالی</th>
+                <th scope="col">PH</th>
+                <th scope="col">سولفات ها</th>
+                <th scope="col">الکل</th>
+                <th scope="col"> کیفیت Wine </th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr style="direction:rtl !important;  font-family: 'Sahel';">
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.fixed_acidity }}</td>
+                    <td>{{ item.volatile_acidity }}</td>
+                    <td>{{ item.citric_acid }}</td>
+                    <td>{{ item.residual_sugar }}</td>
+                    <td>{{ item.chlorides }}</td>
+                    <td>{{ item.free_sulfur_dioxide }}</td>
+                    <td>{{ item.total_sulfur_dioxide }}</td>
+                    <td>{{ item.density }}</td>
+                    <td>{{ item.pH }}</td>
+                    <td>{{ item.sulphates }}</td>
+                    <td>{{ item.alcohol }}</td>
+                    <td>{{ item.quality }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

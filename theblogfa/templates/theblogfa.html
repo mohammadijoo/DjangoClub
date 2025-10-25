@@ -1,0 +1,137 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %} بلاگ جنگو کلاب   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+{% block  cssStyle %}    
+.myhover:hover {
+    color: #6B7A8F !important;
+}
+p {
+    text-align: justify !important;
+}
+
+@media screen and (max-width: 480px) {
+  .myAside {font-size:16px;}
+}
+
+{% endblock %}
+
+{% block content %}
+
+{% load i18n static %}
+
+<div class="container-fluid" style="direction:rtl !important; text-align: justify !important;">
+    <div class="row" style="direction:rtl !important; text-align: justify !important;">
+        <div class="col-3 col-sm-3 col-md-2 col-lg-2 col-xl-2" style="margin-left=0px; padding-left:0px; direction:rtl !important; text-align: justify !important;">
+            
+            
+            <aside class="pr-2">
+                
+                <a href={% url 'articlesfa_api' %} class="" target="_blank" >
+                    <h5 class=" mb-1 mt-3 pb-1  text-gradient  myAside " style="border-bottom: 2px solid #fff; font-family: 'Sahel', 'Caveat Brush', cursive;">
+                           بلاگ API
+                    </h5> <br>
+                </a>
+                 
+              
+        
+                <a href={% url 'category-listfa' %} class="mb-5 " target="_blank"> 
+                    <h5 class=" mb-1pb-3  text-gradient  myAside " style="font-family: 'Sahel', 'Caveat Brush', cursive;">
+                        دسته بندی 
+                    </h5>
+                </a>
+                
+            </aside>
+            
+            
+            
+                
+            <aside class="pr-2">
+
+                {% for item in cat_menu %}
+                
+                    {% if item.publish %}
+            
+                        <a href={% url 'categoryfa'   item|slugify   %} class="">
+                            <h6 class="text-white pb-2 myhover" style="border-bottom: 2px solid #2272FF;">
+                                {{ item }}
+                            </h6>
+                        </a> 
+                        
+                    {% endif %}
+            
+                {% endfor %}
+                
+            
+            </aside>
+        </div>
+        
+        <div class="col-9 col-sm-9 col-md-10 col-lg-10 col-xl-10 pr-4">
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+                مقالات بلاگ
+            </h1>
+            
+            <ul>
+            {% for post in posts %}
+                {% if post.publish %}
+                    <li>
+                    <a href="{% url 'article_detailfa' post.pk %}"> {{ post.title }} </a> | 
+                    <a href="{% url 'categoryfa'  post.category|slugify    %}"> {{ post.category }} </a> |
+                    {{ post.author.first_name }} {{ post.author.last_name }} |  {{ post.post_date }} |
+                    
+                    {% if user.is_authenticated and user.username == post.author.username %}
+                    <small> 
+                        <a href="{% url 'update_postfa' post.pk %}"> ویرایش </a> | 
+                        <a href="{% url 'delete_postfa' post.pk %}"> حذف </a>
+                    </small>
+                    {% endif %}
+                    
+                    <br>
+                    {{ post.snippet }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+            </ul> <br>
+            
+            <div class="text-center ">
+                
+                
+                <nav aria-label="Page navigation example text-center ">
+                  <ul class="pagination justify-content-center ">
+                    {% if posts.has_previous %}
+                
+                    <li class="page-item "><a class="page-link bg-dark" href="?page=1"> &laquo  </a></li>
+                    <li class="page-item "><a class="page-link bg-dark" href="?page={{ posts.previous_page_number }}"> Previous </a></li>
+                
+                    {% endif %}
+                    
+                    <li class="page-item active"><a class="page-link" href="#"> {{ posts.number }} </a></li>
+                    
+                    {% if posts.has_next %}
+    
+                        <li class="page-item"><a class="page-link bg-dark" href="?page={{ posts.next_page_number }}"> Next </a></li>
+                        <li class="page-item"><a class="page-link bg-dark" href="?page={{ posts.paginator.num_pages }}"> &raquo </a></li>
+                    
+                    {% endif %}
+                  </ul>
+                </nav>
+  
+              
+            
+            </div>
+            
+        </div>
+        
+    </div>
+    
+
+</div>
+
+
+
+{% endblock %}
+
+
+

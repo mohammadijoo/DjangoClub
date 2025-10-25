@@ -1,0 +1,44 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Register   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <h1 style="font-family: 'Caveat Brush', cursive; font-size:3rem" class="text-white mt-4 mb-4">
+        Register
+    </h1>
+    <br><br>
+    
+    <div class="form-group">
+        <form method='POST'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <button class="btn btn-secondary"> Register </button>
+        </form>
+    </div>
+    
+    
+    
+    
+</div>
+
+
+{% endblock %}
+
+
+

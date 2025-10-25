@@ -1,0 +1,57 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %}  دسته بندی های بلاگ  {% endblock %}
+
+{% block  metaContent %}   {% endblock %}
+
+{% block  cssStyle %}    
+
+.myhover:hover {
+    color: #6B7A8F !important;
+}
+
+{% endblock %}
+
+{% block content %}
+
+{% load i18n static %}
+
+<div class="container">
+    
+    <div class="row pl-5 pr-5">
+        <div class="col-12 pl-5 pr-5">
+
+            <h1 class="mt-5 mb-1 text-gradient text-center" style="font-family: 'Sahel', 'Caveat Brush', cursive; font-weigth: 900;">
+                            دسته بندی های بلاگ
+            </h1>  <br>
+        
+        
+            {% for item in cat_menu_list %}
+            
+                {% if item.publish %}
+                    
+                    <a href={% url 'categoryfa' item|slugify  %} class="">
+                        <h4 class="text-white pb-2 myhover " style="border-bottom: 2px solid #2272FF;">
+                            {{ item }}
+                        </h4>
+                    </a> 
+                    
+                {% endif %}
+        
+            {% endfor %}
+            <br><br>
+        </div>
+        
+        
+        <a href="{% url 'theblogfa'  %}" class="text-right"> 
+            <i class="fa fa-arrow-right" aria-hidden="true" style="font-size:2.5rem; color:#c5d5cb"></i>
+        </a>
+    </div>
+
+
+    
+
+
+</div>
+
+{% endblock %}

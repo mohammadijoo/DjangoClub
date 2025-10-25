@@ -1,0 +1,46 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %}  Blog Categories  {% endblock %}
+
+{% block  metaContent %}   {% endblock %}
+
+{% block  cssStyle %}    
+
+.myhover:hover {
+    color: #6B7A8F !important;
+}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    
+    <div class="row pl-5 pr-5">
+        <div class="col-12 pl-5 pr-5">
+
+            <h1 class="mt-5 mb-1 text-gradient text-center" style="font-family: 'Caveat Brush', cursive; font-weigth: 900;">
+                            Blog Categories
+            </h1>  <br>
+        
+        
+            {% for item in cat_menu_list %}
+            
+                {% if item.publish %}
+                    
+                    <a href={% url 'category' item|slugify %} class="">
+                        <h4 class="text-white pb-2 myhover " style="border-bottom: 2px solid #2272FF;">
+                            {{ item }}
+                        </h4>
+                    </a> 
+                    
+                {% endif %}
+        
+            {% endfor %}
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

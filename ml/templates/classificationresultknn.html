@@ -1,0 +1,42 @@
+{% extends "portfolio/base-en.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row">
+        
+        <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            Prediction Results
+        </h1>
+
+            <table class="table text-white">
+                <thead class="text-center">
+                <tr> 
+                <th scope="col">#</th>
+                <th scope="col">Temperature(K)</th>
+                <th scope="col">Relative Luminosity</th>
+                <th scope="col"> Relative Radius </th>
+                <th scope="col">Absolute Magnitude</th>
+                <th scope="col">General Obs. Color</th>
+                <th scope="col">SMASS Spec</th>
+                <th scope="col">Type</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.Temperature }}</td>
+                    <td>{{ item.L }}</td>
+                    <td>{{ item.R }}</td>
+                    <td>{{ item.A_M }}</td>
+                    <td>{{ item.Color }}</td>
+                    <td>{{ item.Spectral_Class }}</td>
+                    <td>{{ item.Type }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

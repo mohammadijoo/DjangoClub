@@ -1,0 +1,48 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row" style="direction:rtl !important; font-family: 'Sahel';">
+        
+        <h1 style="direction:rtl !important;  font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            نتایج پیش بینی ها
+        </h1>
+
+            <table class="table text-white" style="font-family: 'Sahel';">
+                <thead class="text-center" style="direction:rtl !important;  font-family: 'Sahel';">
+                <tr> 
+                <th scope="col">#</th>
+                <th scope="col">قیرات</th>
+                <th scope="col">برش</th>
+                <th scope="col"> رنگ </th>
+                <th scope="col">شفافیت</th>
+                <th scope="col">عمق</th>
+                <th scope="col">Table</th>
+                <th scope="col">X</th>
+                <th scope="col">Y</th>
+                <th scope="col">Z</th>
+                <th scope="col">قیمت الماس</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr style="direction:rtl !important;  font-family: 'Sahel';">
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.carat }}</td>
+                    <td>{{ item.cut }}</td>
+                    <td>{{ item.color }}</td>
+                    <td>{{ item.clarity }}</td>
+                    <td>{{ item.depth }}</td>
+                    <td>{{ item.table }}</td>
+                    <td>{{ item.x }}</td>
+                    <td>{{ item.y }}</td>
+                    <td>{{ item.z }}</td>
+                    <td>{{ item.price }} USD</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends "portfolio/base-en2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>
+                <div style="color:black;">Age: <span id="ag" style="color:black;"></span></div>
+                <div style="color:black;">Job: <span id="jo" style="color:black;"></span></div>
+                <h5 class="pt-3">Salary Prediction:</h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'ml:regressionresultelasticnet' %}" role="button">View Previous Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:regressionresultelasticnet' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Results</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/salaries.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Source Code</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/salaries.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Dataset</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                Salary Prediction
+            </h1>
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                Using <u>Elastic Net Regression</u> Model
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                After submitting the form, wait at least <u>10 seconds</u>  for the model to calculate and show the result. 
+            </h6>
+            <form action="" id="post-form">   
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="Age">Age <small class="pl-4" style="color:#BFA181;">(between 23 and 65)</small> </label>
+                    <input type="number" step="1" class="form-control" id="Age" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Job">Job <small class="pl-4" style="color:#BFA181;">(0 &#8594; Accountant , 1 &#8594; Dentist, 2 &#8594; High School Teacher, 3 &#8594; Software Engineer)</small> </label>
+                    <select name="Job" id="Job" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                Model Description:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                Regression is a supervised machine learning method for understanding the relationship between independent variables or features and a dependent variable or outcome. One of the algorithms used for regression is the <a href="https://en.wikipedia.org/wiki/Elastic_net_regularization" target="_blank">“Elastic Net Regression”</a>. <br>
+                Here, we use the <b style="color:#6E6E6E"><u>salaries.csv</u></b> dataset for regression purposes and you can download the dataset from the link on top of this page. <br>
+                This dataset has 2 features: “<i style="color:#6ACFC7">Age</i>” and “<i style="color:#6ACFC7">Job</i>” <br>
+                And the prediction variable is: “<i style="color:#6ACFC7">Salary</i>”. <br>
+                
+                In the above form, you enter the values of 2 features and the model returns the Salary in a pop-up form. As 1 feature of our dataset is Categorical and another one is Numerical, for using Elastic Net Regression for this mixed dataset, we need to convert categorical feature to numerical label and then we could use the Elastic Net Regression method.   <br>
+                
+                Notice that the values and ranges of each feature are as below: <br>
+                
+                <h5><mark class="mt-2 p-1">  23 < Age < 65  </mark></h5>                                
+                <h5><mark class="mt-2 p-1">  Job (0 &#8594; Accountant , 1 &#8594; Dentist, 2 &#8594; High School Teacher, 3 &#8594; Software Engineer) </mark></h5> 
+                <h5><mark class="mt-2 p-1">    4000 < Salary < 24100  </mark></h5> 
+                
+                The sample code used to train a “Elastic Net Regression” model, is provided in the link on top of this page. Each time you run this form and predictions happen, the values will store in the database, and with the link “result” on top of this page, you will see the previous results of the model prediction. Your recent run will be added to the end of this list.    
+            
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_regression_elasticnet" %}',
+            data:{
+                Age:$('#Age').val(),
+                Job:$('#Job').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("ag").innerHTML = json['Age']
+                document.getElementById("jo").innerHTML = json['Job']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row" style="direction:rtl !important; font-family: 'Sahel';">
+        
+        <h1 style="direction:rtl !important;  font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            نتایج پیش بینی ها
+        </h1>
+
+            <table class="table text-white" style="font-family: 'Sahel';">
+                <thead class="text-center" style="direction:rtl !important;  font-family: 'Sahel';">
+                <tr> 
+                <th scope="col">#</th>
+                <th scope="col">وزن</th>
+                <th scope="col">طول 1</th>
+                <th scope="col">طول 2 </th>
+                <th scope="col">طول 3</th>
+                <th scope="col">ارتفاع</th>
+                <th scope="col">عرض</th>
+                <th scope="col">نوع ماهی</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr style="direction:rtl !important;  font-family: 'Sahel';">
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.Weight }}</td>
+                    <td>{{ item.Length1 }}</td>
+                    <td>{{ item.Length2 }}</td>
+                    <td>{{ item.Length3 }}</td>
+                    <td>{{ item.Height }}</td>
+                    <td>{{ item.Width }}</td>
+                    <td>{{ item.Species }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

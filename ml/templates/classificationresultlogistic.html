@@ -1,0 +1,46 @@
+{% extends "portfolio/base-en.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row">
+        
+        <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            Prediction Results
+        </h1>
+
+            <table class="table text-white">
+                <thead class="text-center">
+                <tr> 
+                <th scope="col">#</th>
+                <th scope="col">Pregnancies</th>
+                <th scope="col">Glucose</th>
+                <th scope="col">Blood Pressure</th>
+                <th scope="col">Skin Thickness</th>
+                <th scope="col">Insulin</th>
+                <th scope="col">BMI</th>
+                <th scope="col">Diabetes Pedigree Function</th>
+                <th scope="col">Age</th>
+                <th scope="col">Prediction</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.Pregnancies }}</td>
+                    <td>{{ item.Glucose }}</td>
+                    <td>{{ item.BloodPressure }}</td>
+                    <td>{{ item.SkinThickness }}</td>
+                    <td>{{ item.Insulin }}</td>
+                    <td>{{ item.BMI }}</td>
+                    <td>{{ item.DiabetesPedigreeFunction }}</td>
+                    <td>{{ item.Age }}</td>
+                    <td>{{ item.classification }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "portfolio/base-en2.html" %}
+{% load static%}
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+ 
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Support Vector Machine </h2>
+            <a href="{% url 'ml:classificationsvm' %}" target="_blank">
+                <img src="{% static 'ml/SVM2.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Logistic Regression </h2>
+            <a href="{% url 'ml:classificationlogistic' %}" target="_blank">
+                <img src="{% static 'ml/logistic_regression1.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Naive Bayes Classifier </h2>
+            <a href="{% url 'ml:classificationnaivebayes' %}" target="_blank">
+                <img src="{% static 'ml/naive_bayes_classifier1.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> K-Nearest Neighbor Classifier </h2>
+            <a href="{% url 'ml:classificationknearest' %}" target="_blank">
+                <img src="{% static 'ml/k_nearest_neighbor_classifier1.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Decision Tree Classifier  </h2>
+            <a href="{% url 'ml:classificationdecisiontree' %}" target="_blank">
+                <img src="{% static 'ml/decision_tree_classifier_1.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Random Forest Classifier  </h2>
+            <a href="{% url 'ml:classificationrandomforest' %}" target="_blank">
+                <img src="{% static 'ml/random_forest_classifier1.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+{% endblock %}
+

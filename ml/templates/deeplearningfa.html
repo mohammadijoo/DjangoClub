@@ -1,0 +1,46 @@
+{% extends "portfolio/base-en2.html" %}
+{% load static%}
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+ 
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-6 justify-content-md-center text-center p-3">
+            <h2 class="text-center text-white"> Support Vector Machine </h2>
+            <a href="{% url 'ml:classificationsvm' %}" target="_blank">
+                <img src="{% static 'ml/SVM2.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-md-6 justify-content-md-center text-center p-3">
+            <h2 class="text-center text-white"> Logistic Regression </h2>
+            <a href="{% url 'ml:classificationsvm' %}" target="_blank">
+                <img src="{% static 'ml/SVM2.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-md-6 justify-content-md-center text-center p-3">
+            <h2 class="text-center text-white"> Naive Bayes Classifier </h2>
+            <a href="{% url 'ml:classificationsvm' %}" target="_blank">
+                <img src="{% static 'ml/SVM2.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-md-6 justify-content-md-center text-center p-3">
+            <h2 class="text-center text-white"> Support Vector Machine </h2>
+            <a href="{% url 'ml:classificationsvm' %}" target="_blank">
+                <img src="{% static 'ml/SVM2.jpg' %}" style="width:100%">
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+

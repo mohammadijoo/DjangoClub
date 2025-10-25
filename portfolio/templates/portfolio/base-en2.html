@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" style="font-family:'Montserrat', sans-serif; !important">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="keyword" content=" {% block  metaContent %}    {% endblock %}  ">
+  <title>  {% block title %}  {% endblock %}  </title>
+    {% load static %}
+  <link rel="shortcut icon" href={% static 'img/django3.png' %} type="image/x-icon">
+
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'ml/assets/bootstrap.min.css' %}" >
+  <script src="{% static 'ml/assets/jquery.min.js' %}"></script>
+  
+  <link rel="stylesheet" href={% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %} rel="stylesheet">
+  <link rel="stylesheet" href={% static 'css/style.css' %}>
+  <link rel="stylesheet" href={% static 'css/footer.css' %}>
+
+<style>
+    .text-gradient {
+      background: -webkit-linear-gradient(62deg, #00f260 0%, #0575e6 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .myCenter {
+        text-align:center !important;
+    }
+    .firstREM {
+        font-size: 1.8rem !important;
+    }
+    .myHover:hover {
+        background-color: #660000 !important;
+    }
+    .myHover2:hover {
+        color: #ff4c4c !important;
+    }
+    .myHover3:hover {
+        background-color: #CA3433 !important;
+    }	
+    
+    .myCentering {
+       left: 50% !important;
+       transform: translateX(-50%) !important;
+    }
+    
+    {% block cssStyle %}  {% endblock %}
+</style>
+</head>
+
+<body class="text-white" style="font-family:'Montserrat', sans-serif;  background-color: #0e121a;">
+
+  <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-lg-12 text-center mb-5">
+					<h1 class="heading-section text-gradient" style="font-family:'Lato', sans-serif; font-weight:900; font-size:3.3rem; margin-bottom:0; text-align: center !important;">   Django Club   </h1>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid px-lg-5">
+			<div class="row justify-content-between">
+			    <div class="col-lg-3 ">
+			        <div class="d-lg-flex justify-content-end mb-lg-0 mb-3">
+						<form action="{% url 'search-results' %}" class="searchform order-lg-last" method="POST">
+						    {% csrf_token %}
+        			          <div class="form-group d-flex">
+        			            <input type="search" class="form-control pl-3" placeholder="Search" name="searched">
+        			            <button type="submit" placeholder="" class="form-control search"><span class="fa fa-search"></span></button>
+        			          </div>
+		                </form>
+					</div>
+				</div>
+				<div class="col-lg-6 ">
+					<div class="row">
+						<div class="col-lg-12 text-center " style="direction:ltr; color:white">
+							<a class="navbar-brand" href="{% url 'en' %}" style="direction:ltr; color:white; font-size:1.2rem">  Web Design <br> with Django Framework  <span class="pt-4" style="direction:ltr; color:white; font-size:0.8rem">   Along with Machine Learning and Deep Learning <br> Python Projects      </span></a>
+						</div>
+						
+					</div>
+				</div>
+				<div class="col-lg-3 d-flex mb-3">
+					<div class="social-media">
+		    		    <p class="mb-0 d-flex">
+    		    			<a href="https://github.com/mohammadijoo" class="d-flex align-items-center justify-content-center firstREM myHover" target="_blank"><span class="fa fa-github text-gradient myHover"><i class="sr-only myHover">github</i></span></a>
+    		    			<a href="https://stackoverflow.com/users/12603692/abolfazl?tab=profile" class="d-flex align-items-center justify-content-center firstREM myHover" target="_blank"><span class="fa fa-stack-overflow text-gradient"><i class="sr-only">Stack Overflow</i></span></a>
+    		    			<a href="https://www.linkedin.com/in/abolfazl-mohammadijoo-ab573b6/" class="d-flex align-items-center justify-content-center firstREM myHover" target="_blank"><span class="fa fa-linkedin text-gradient" ><i class="sr-only">linkedin</i></span></a>
+    		    			<a href="https://www.instagram.com/abolfazl_m1363/" class="d-flex align-items-center justify-content-center firstREM myHover" target="_blank"><span class="fa fa-instagram text-gradient" ><i class="sr-only">Instagram</i></span></a>
+                            <a href="https://twitter.com/mohammadijoo" class="d-flex align-items-center justify-content-center firstREM myHover" target="_blank"><span class="fa fa-twitter text-gradient" ><i class="sr-only">Twitter</i></span></a>
+    		    		    <a href="https://www.youtube.com/channel/UCwG1CdAh6Me3-UeZsyVytLw?view_as=subscriber" class="d-flex align-items-center justify-content-center firstREM myHover" target="_blank"><span class="fa fa-youtube text-gradient" ><i class="sr-only">youtube</i></span></a>
+		    		    </p>
+	                </div>
+				</div>
+			</div>
+		</div>
+		<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" style="direction:ltr; padding-bottom:0">
+	    <div class="container-fluid" >
+
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="fa fa-bars"></span> Menu
+	      </button>
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        
+	        <ul class="navbar-nav m-auto">
+	            <a class="navbar-brand text-center" href="{% url 'home' %}" >
+                    <img src="{% static 'img/iran.png' %}"  style="width:50px " class="mt-2 " alt=" Persian ">
+                </a>
+    	        <li class="nav-item active text-center"><a href="{% url 'en' %}" class="nav-link myHover2" style="font-size:1.1rem">Home</a></li>
+                
+                {% if user.is_authenticated %}
+                        {% if user.is_superuser or user.is_staff %}
+                
+                <li class="nav-item dropdown text-center" style="text-align: center !important">
+                  <a class="nav-link dropdown-toggle myHover2 text-center" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="font-size:1.1rem">  Blog  </a>
+                  <div class="dropdown-menu justify-content-center " aria-labelledby="dropdown04" style="text-align: center !important">
+                  	<a class="dropdown-item myHover3 text-center" href="{% url 'theblog' %}" style="text-align:center; font-size:1rem">Blog Articles</a>
+                    <a class="dropdown-item myHover3 text-center" href="{% url 'add_post' %}" style="text-align:center; font-size:1rem">Add Post</a>
+                    <a class="dropdown-item myHover3 text-center" href="{% url 'add_category' %}" style="text-align:center; font-size:1rem"> Add Category </a>
+                  </div>
+                </li>
+                
+                        {% else %}
+                        <li class="nav-item"><a href="{% url 'theblog' %}" class="nav-link myHover2" style="font-size:1.1rem">Blog</a>
+                        </li>
+                
+                        {% endif %}
+                
+                {% else %}
+                    <li class="nav-item text-center"><a href="{% url 'theblog' %}" class="nav-link myHover2" style="font-size:1.1rem">Blog</a>
+                    </li>
+                {% endif %}
+                
+                <li class="nav-item dropdown text-center" style="text-align: center !important">
+                  <a class="nav-link dropdown-toggle myHover2" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="font-size:1.1rem">  Machine Learning  </a>
+                  <div class="dropdown-menu justify-content-center text-center" aria-labelledby="dropdown03" style="text-align: center !important; min-width:15em">
+                  	<a class="dropdown-item myHover3" href="{% url 'ml:regression' %}" target="_blank" style="text-align:center; font-size:1.1rem">Regression</a>
+                    <a class="dropdown-item myHover3" href="{% url 'ml:classification' %}" target="_blank" style="text-align:center; font-size:1.1rem">Classification</a>
+                    <a class="dropdown-item myHover3" href="#" style="text-align:center; font-size:1.1rem"> Clustering </a>
+                    <a class="dropdown-item myHover3" href="#" style="text-align:center; font-size:1.1rem"> Deep Learning </a>
+                  </div>
+                </li>
+    
+    	        <li class="nav-item text-center"><a href="{% url 'contactEn' %}" class="nav-link myHover2" style="font-size:1.1rem">   Contact Us  </a></li>
+    	        
+    	        {% if user.is_authenticated %}
+    	            
+    	            <li class="nav-item dropdown text-center" style="text-align: center !important">
+                      <a class="nav-link dropdown-toggle myHover2 text-center text-gradient" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="font-size:1.1rem">  Hello {{ user.first_name }}   </a>
+                      <div class="dropdown-menu justify-content-center " aria-labelledby="dropdown05" style="text-align: center !important; min-width:15em">
+                        {% if user.profile.id %}
+                        <a class="dropdown-item myHover3 text-center" href="{% url 'show_profile_page' user.profile.id %}" style="text-align:center; font-size:1rem">Profile Page</a>
+                        <a class="dropdown-item myHover3 text-center" href="{% url 'edit_profile_page' user.profile.id %}" style="text-align:center; font-size:1rem">Edit Profile Page</a>
+                        {% else %}
+                        <a class="dropdown-item myHover3 text-center" href="{% url 'create_profile_page' %}" style="text-align:center; font-size:1rem">Create Profile Page</a>
+                        {% endif %}
+                      	<a class="dropdown-item myHover3 text-center" href="{% url 'edit_profile' %}" style="text-align:center; font-size:1rem">Edit Settings</a>
+                      </div>
+                    </li>
+                    
+                    <li class="nav-item text-center"><a href="{% url 'logout' %}" class="nav-link myHover2" style="font-size:1.1rem">   Logout  </a></li>
+    	            
+    	        {% else %}
+    	            <li class="nav-item text-center"><a href="{% url 'login' %}" class="nav-link myHover2" style="font-size:1.1rem">   Login  </a></li>
+      
+    	        <li class="nav-item text-center"><a href="{% url 'register' %}" class="nav-link myHover2" style="font-size:1.1rem">   Register  </a></li>
+    	        {% endif %}
+    	        
+    	        
+    	        
+
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+
+	</section>
+
+
+
+
+
+  {% block content %} {% endblock %}
+
+
+
+  <!-- Footer -->
+<br><br>
+<br>
+
+
+<!-- <section id="footerSec">Footer Example 4</section> -->
+<footer class="footer-distributed" style="font-family:'Montserrat', sans-serif; direction:ltr !important;">
+
+			<div class="footer-left" style="">
+
+				<!-- <h3>Company<span>logo</span></h3> -->
+        <a href="https://mohammadijoo.com" target="_blank">
+        <img src="{% static 'portfolio/Abolfazl-Mohammadijoo-1.svg' %}"
+        alt="Abolfazl Mohammadijoo" style="max-width:100px; justify-content: center;">
+        </a>
+
+				<p class="footer-links">
+				    <a href="{% url 'en' %}" class="link-1">  Home  </a>
+				    <a href="{% url 'theblog' %}">  Blog  </a>
+					<a href="https://pythonclub.ir/en"  target="_blank">   Python Club     </a>
+					<a href="https://aspclub.ir" target="_blank">   ASP.NET Club   </a>
+                    <a href="{% url 'contactEn' %}" >  Contact Us  </a>
+
+					
+
+					
+
+					<!-- <a href="#">Faq</a>
+
+					<a href="#">Contact</a> -->
+				</p>
+
+				<p class="footer-company-name">©2023 Abolfazl Mohammadijoo</p>
+			</div>
+
+			<div class="footer-center" >
+
+				<div>
+					<i class="fa fa-map-marker"></i>
+					<p style="direction:ltr">
+                        <span style="direction:ltr">  Enghelab Ave, Namjoo St  </span>   Tehran, IRAN
+                    </p>
+                </div>
+
+				<div>
+					<i class="fa fa-phone"></i>
+					<p>+98 912 490 8372</p>
+				</div>
+
+				<div>
+					<i class="fa fa-envelope"></i>
+					<p>
+                         <a href="mailto:info@django3.ir">info@django3.ir</a>
+                    </p>
+				</div>
+
+			</div>
+
+			<div class="footer-right" style=" text-align:right">
+
+				<p class="footer-company-about" style="direction:ltr ; text-align:justify; color:white">
+					<span style="direction:ltr !important; font-size:1.2rem" class="text-gradient">    About Django Club    </span>
+                 The Django Club website is designed on the back-end side with the Django framework, which is written in Python. At Django Club, the focus is on providing machine learning, neural network and deep learning projects.
+				</p>
+
+				<div class="footer-icons" style="text-align: center !important;">
+
+		  <a href="https://wa.me/989124908372" target="_blank"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+          <a href="https://t.me/abolfazlm1363?&text=Abolfazl%2520Mohammadijoo" target="_blank"><i class="fa fa-telegram" aria-hidden="true"></i></a>
+          <a href="https://mohammadijoo.com/blog" target="_blank"><i class="fa fa-rss" aria-hidden="true"></i></a>
+          <a href="https://www.programmer-club.ir/" target="_blank"><i class="fa fa-code" aria-hidden="true"></i></a>
+          <a href="https://abolfazlm.com/" target="_blank"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+
+
+
+				</div>
+
+			</div>
+
+		</footer>
+
+
+ </body>
+
+<script src="{% static 'ml/assets/popper.min.js' %}"></script>
+<script src="{% static 'ml/assets/bootstrap.min.js' %}"></script>
+<script src={% static 'js/main.js' %}></script>
+
+</html>

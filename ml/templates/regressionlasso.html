@@ -1,0 +1,230 @@
+{% extends "portfolio/base-en2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>
+                <div style="color:black;">Carat: <span id="ca" style="color:black;"></span></div>
+                <div style="color:black;">Cut: <span id="cu" style="color:black;"></span></div>
+                <div style="color:black;">Color: <span id="co" style="color:black;"></span></div>
+                <div style="color:black;">Clarity: <span id="cl" style="color:black;"></span></div>
+                <div style="color:black;">Depth: <span id="de" style="color:black;"></span></div>
+                <div style="color:black;">Table: <span id="ta" style="color:black;"></span></div>
+                <div style="color:black;">X: <span id="xx" style="color:black;"></span></div>
+                <div style="color:black;">Y: <span id="yy" style="color:black;"></span></div>
+                <div style="color:black;">Z: <span id="zz" style="color:black;"></span></div>
+                <h5 class="pt-3">Diamond Price Prediction:</h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'ml:regressionresultlasso' %}" role="button">View Previous Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:regressionresultlasso' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Results</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/diamonds.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Source Code</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/diamonds.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Dataset</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                Diamond Price Prediction
+            </h1>
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                Using <u>Lasso Regression</u> Model
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                After submitting the form, wait at least <u>10 seconds</u>  for the model to calculate and show the result.  <br> Also, all entered float numbers must have at most 2 decimal points, like: 1.23
+            </h6>
+            <form action="" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="carat">Carat <small class="pl-4" style="color:#BFA181;">(between 0.2 and 5.01)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="carat" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="depth">Depth <small class="pl-4" style="color:#BFA181;">(between 43 and 79)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="depth" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="table">Table <small class="pl-4" style="color:#BFA181;">(between 43 and 95)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="table" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="x">X <small class="pl-4" style="color:#BFA181;">(between 0 and 10.74)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="x" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="y">Y <small class="pl-4" style="color:#BFA181;">(between 0 and 58.9)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="y" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="z">Z <small class="pl-4" style="color:#BFA181;">(between 0 and 31.8)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="z" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="cut">Cut <small class="pl-4" style="color:#BFA181;">(0 &#8594; Fair , 1 &#8594; Good, 2 &#8594; Ideal, 3 &#8594; Premium, 4 &#8594; Very Good)</small> </label>
+                    <select name="cut" id="cut" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="color">Color <small class="pl-4" style="color:#BFA181;">0 &#8594; D (Best Color) , 1 &#8594; E, 2 &#8594; F, 3 &#8594; G, 4 &#8594; H, 5 &#8594; I, 6 &#8594; J (Worst Color)</small> </label>
+                    <select name="color" id="color" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="clarity">Clarity <small class="pl-4" style="color:#BFA181;">(0 &#8594; I1 , 1 &#8594; IF, 2 &#8594; SI1, 3 &#8594; SI2, 4 &#8594; VS1, 5 &#8594; VS2, 6 &#8594; VVS1, 7 &#8594; VVS2)</small> </label>
+                    <select name="clarity" id="clarity" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                    </select>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                Model Description:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                Regression is a supervised machine learning method for understanding the relationship between independent variables or features and a dependent variable or outcome. One of the algorithms used for regression is the <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)" target="_blank">“Lasso Regression”</a>. <br>
+                
+                Here, we use the <b style="color:#6E6E6E"><u>diamonds.csv</u></b> dataset for regression purposes and you can download the dataset from the link on top of this page. This dataset has 9 features: <br>
+                “<i style="color:#6ACFC7">carat</i>”, “<i style="color:#6ACFC7">cut</i>”, “<i style="color:#6ACFC7">color</i>”, 
+                “<i style="color:#6ACFC7">clarity</i>”, “<i style="color:#6ACFC7">depth</i>”, “<i style="color:#6ACFC7">table</i>”, 
+                “<i style="color:#6ACFC7">x</i>”, “<i style="color:#6ACFC7">y</i>” and “<i style="color:#6ACFC7">z</i>” <br>
+                And the prediction variable is: “<i style="color:#6ACFC7">Diamond Price</i>”.  <br>
+                In the above form, you enter the values of 9 features and the model returns the Diamond Price in a pop-up form. As the diamond prices in dataset are from 326$ to 18823$, when you enter features values in form, there is a possibility for small negative numbers returned by lasso model like: -50$. Therefore, we converted all small negative prices to 0.  <br>
+                Also, 3 features of our dataset are Categorical and 6 of them are Numerical. Hence, for using Lasso Regression for this mixed dataset, we need to convert categorical features to numerical labels and then we could use the Lasso Regression method.  <br>
+                
+                Notice that the values and ranges of each feature are as below:  <br>  
+            
+            </p>
+            
+                <h5 class="mt-3 text-white"><strong>Carat:</strong> weight of the diamond  </h5>   <mark class=""> 0.2 < Carat < 5.01  </mark>                 <br>
+                <h5 class="mt-3 text-white"><strong>Cut:</strong> quality of the cut </h5>     <mark class=""> 0 → Fair , 1 → Good, 2 → Ideal, 3 → Premium, 4 → Very Good  </mark>         <br>
+                <h5 class="mt-3 text-white"><strong>Color:</strong> diamond color  </h5>   <mark class="">0 → D (Best Color) , 1 → E, 2 → F,  3 → G, 4 → H, 5 → I, 6 → J (Worst Color)  </mark>         <br>
+                <h5 class="mt-3 text-white"><strong>Clarity:</strong>  a measurement of how clear the diamond is → </h5><mark class="">I1 (worst), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (best)  </mark>         <br>
+                <h5 class="mt-3 text-white"><strong>X:</strong> length in mm     </h5>    <mark class="">0 < X < 10.74  </mark>        <br>
+                <h5 class="mt-3 text-white"><strong>Y:</strong> width in mm    </h5>      <mark class="">0 < Y < 58.9  </mark>     <br>
+                <h5 class="mt-3 text-white"><strong>Z:</strong> depth in mm    </h5>     <mark class="">0 < Z < 31.8   </mark>       <br>
+                <h5 class="mt-3 text-white"><strong>Depth:</strong> total depth percentage = z / mean(x, y) = 2 * z / (x + y)   </h5>         <mark class="">43 < Depth < 79   </mark>       <br>
+                <h5 class="mt-3 text-white"><strong>Table:</strong> width of top of diamond relative to widest point       </h5>         <mark class=""> 43 < Table < 95    </mark>      <br>
+
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                The sample code used to train a “Lasso Regression” model, is provided in the link on top of this page. Each time you run this form and predictions happen, the values will store in the database, and with the link “result” on top of this page, you will see the previous results of the model prediction. Your recent run will be added to the end of this list.  
+            
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_regression_lasso" %}',
+            data:{
+                carat:$('#carat').val(),
+                cut:$('#cut').val(),
+                color:$('#color').val(),
+                clarity:$('#clarity').val(),
+                depth:$('#depth').val(),
+                table:$('#table').val(),
+                x:$('#x').val(),
+                y:$('#y').val(),
+                z:$('#z').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("ca").innerHTML = json['carat']
+                document.getElementById("cu").innerHTML = json['cut']
+                document.getElementById("co").innerHTML = json['color']
+                document.getElementById("cl").innerHTML = json['clarity']
+                document.getElementById("de").innerHTML = json['depth']
+                document.getElementById("ta").innerHTML = json['table']
+                document.getElementById("xx").innerHTML = json['x']
+                document.getElementById("yy").innerHTML = json['y']
+                document.getElementById("zz").innerHTML = json['z']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,107 @@
+{% extends 'portfolio/base-en.html' %}
+{% block  metaContent %}  Abolfazl Mohammadijoo, Django Club, Django Blog, Django Tutorial, Machine Learning with Python, Django Tutor, Django Video Tutorial, Deep Learning with Python  {% endblock %}
+{% block title %} Django Club  {% endblock %}
+
+{% block cssStyle %}  
+
+a:hover {
+  color: #C3073F !important;
+}
+
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="container">
+    
+    {% if searched %}
+    
+        <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+            Search Results for: <strong style="color: #9df9ef">{{ searched }}</strong>
+        </h1> <br>
+       
+    <ol>
+         
+        {% for item in SearchResults1 %}
+            <li class="text-justify text-white">
+                <a href="{% url 'article_detail' item.id %}" target="_blank" class="text-justify text-white">
+                    {{ item }}
+                </a>
+            </li>
+            <hr>
+        {% endfor %}
+        
+        
+        
+        {% for item in SearchResults2 %}
+            <li class="text-justify text-white">
+                <a href="{% url 'show_profile_page' item.id %}" target="_blank" class="text-justify text-white">
+                    {{ item.user.first_name }} {{ item.user.last_name }}
+                </a>
+            </li>
+            <hr>
+        {% endfor %}
+        
+        <!--{% for item in SearchResults3 %}-->
+        <!--    <li class="text-justify text-white">-->
+        <!--        <a href="{% url 'article_detail' item.id %}" target="_blank" class="text-justify text-white">-->
+        <!--            {{ item }}-->
+        <!--        </a>-->
+        <!--    </li>-->
+        <!--    <hr>-->
+        <!--{% endfor %}-->
+        
+        <!--{% for item in SearchResults4 %}-->
+        <!--    <li class="text-justify text-white">-->
+        <!--        <a href="{% url 'article_detail' item.id %}" target="_blank" class="text-justify text-white">-->
+        <!--            {{ item }}-->
+        <!--        </a>-->
+        <!--    </li>-->
+        <!--    <hr>-->
+        <!--{% endfor %}-->
+        
+        <!--{% for item in SearchResults5 %}-->
+        <!--    <a href="{% url 'show_profile_page' item.id %}" target="_blank">-->
+        <!--        {{ item }}-->
+        <!--    </a>-->
+        <!--    <br><hr>-->
+        <!--{% endfor %}-->
+        
+        <!--{% for item in SearchResults6 %}-->
+        <!--    <a href="{% url 'category' item.id %}" target="_blank">-->
+        <!--        {{ item }}-->
+        <!--    </a>-->
+        <!--    <br><hr>-->
+        <!--{% endfor %}-->
+        
+    </ol>
+        
+    {% else %}
+    
+        <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4"> 
+            No Search Keyword Is Provided! 
+        </h1>
+        
+    {% endif %}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+
+
+
+
+{% endblock %}

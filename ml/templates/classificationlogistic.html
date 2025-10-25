@@ -1,0 +1,192 @@
+{% extends "portfolio/base-en2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>   
+                <div style="color:black;">Pregnancies: <span id="Pr" style="color:black;"></span></div>
+                <div style="color:black;">Glucose: <span id="Gl" style="color:black;"></span></div>
+                <div style="color:black;">Blood Pressure: <span id="Bl" style="color:black;"></span></div>
+                <div style="color:black;">Skin Thickness: <span id="Sk" style="color:black;"></span></div>
+                <div style="color:black;">Insulin: <span id="In" style="color:black;"></span></div>
+                <div style="color:black;">BMI: <span id="BM" style="color:black;"></span></div>
+                <div style="color:black;">Diabetes Pedigree Function: <span id="Di" style="color:black;"></span></div>
+                <div style="color:black;">Age: <span id="Ag" style="color:black;"></span></div>
+                <h5 class="pt-3">Prediction Classification:</h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'ml:classificationresultlogistic' %}" role="button">View Previous Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:classificationresultlogistic' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Results</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/diabetes.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Source Code</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/diabetes.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Dataset</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                Diabetes Classification
+            </h1>
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                Using <u>Logistic Regression</u> Classification Model
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                After submitting the form, wait at least <u>10 seconds</u>  for the model to calculate and show the result. <br> Also, all entered float numbers must have at most 2 decimal points, like: 1.23
+            </h6>
+            <form action="" id="post-form">
+                {% csrf_token %}    
+                <div class="form-group">
+                    <label for="Pregnancies">Pregnancies <small class="pl-4" style="color:#BFA181;">(Between 0 and 17)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Pregnancies" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Glucose">Glucose <small class="pl-4" style="color:#BFA181;">(Between 0 and 199)</small> </label> 
+                    <input type="number" step="0.01" class="form-control" id="Glucose" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="BloodPressure">Blood Pressure <small class="pl-4" style="color:#BFA181;">(Between 0 and 122)</small> </label>  
+                    <input type="number" step="0.01" class="form-control" id="BloodPressure" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="SkinThickness">Skin Thickness <small class="pl-4" style="color:#BFA181;">(Between 0 and 99)</small> </label> 
+                    <input type="number" step="0.01" class="form-control" id="SkinThickness" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Insulin">Insulin <small class="pl-4" style="color:#BFA181;">(Between 0 and 846)</small> </label>  
+                    <input type="number" step="0.01" class="form-control" id="Insulin" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="BMI">BMI <small class="pl-4" style="color:#BFA181;">(Between 0 and 68)</small> </label>  
+                    <input type="number" step="0.01" class="form-control" id="BMI" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="DiabetesPedigreeFunction">Diabetes Pedigree Function <small class="pl-4" style="color:#BFA181;">(Between 0.07 and 2.42)</small> </label>  
+                    <input type="number" step="0.01" class="form-control" id="DiabetesPedigreeFunction" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Age">Age <small class="pl-4" style="color:#BFA181;">(Between 21 and 81)</small> </label>   
+                    <input type="number" step="0.01" class="form-control" id="Age" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                Model Description:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                Classification is a supervised machine learning method where the model tries to predict the correct label of a given input data. One of the algorithms used for classification is <a href="https://en.wikipedia.org/wiki/Logistic_regression" target="_blank">“Logistic Regression”</a>. <br>
+                Here, we use the <b style="color:#6E6E6E"><u>diabetes.csv</u></b> dataset for classification purposes and you can download the dataset from the link on top of this page. This dataset has 8 features: <br>
+                “<i style="color:#6ACFC7">Pregnancies</i>”, “<i style="color:#6ACFC7">Glucose</i>”, “<i style="color:#6ACFC7">Blood Pressure</i>”, “<i style="color:#6ACFC7">Skin Thickness</i>”, “<i style="color:#6ACFC7">Insulin</i>”, “<i style="color:#6ACFC7">BMI</i>”, “<i style="color:#6ACFC7">Diabetes Pedigree Function</i>” and “<i style="color:#6ACFC7">Age</i>” <br>
+                And the label for each item in the dataset is whether you have diabetes or not, which has 2 values: <br>
+                “<i style="color:#6ACFC7">Diabetic</i>” and “<i style="color:#6ACFC7">Non-Diabetic</i>”. <br>
+                In the above form, you enter the values of 8 features and the model returns whether you have diabetes or not in a pop-up form. <br>
+                Notice that the range of each feature is as below: <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Pregnancies < 17  </span>    <br>                              
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Glucose < 199 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Blood Pressure < 122   </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Skin Thickness < 99  </span> <br> 
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Insulin < 846  </span>    <br>                              
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < BMI < 68   </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0.07 < Diabetes Pedigree Function < 2.42  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 21 < Age < 81  </span> <br>
+                                          
+                The sample code used to train a “Logistic Regression” classification model, is provided in the link on top of this page. Each time you run this form and classification predictions happen, the values will store in the database, and with the link “result” on top of this page, you will see the previous results of the model prediction. Your recent run will be added to the end of this list. 
+
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_classification_logistic" %}',
+            data:{
+                Pregnancies:$('#Pregnancies').val(),
+                Glucose:$('#Glucose').val(),
+                BloodPressure:$('#BloodPressure').val(),
+                SkinThickness:$('#SkinThickness').val(),
+                Insulin:$('#Insulin').val(),
+                BMI:$('#BMI').val(),
+                DiabetesPedigreeFunction:$('#DiabetesPedigreeFunction').val(),
+                Age:$('#Age').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("Pr").innerHTML = json['Pregnancies']
+                document.getElementById("Gl").innerHTML = json['Glucose']
+                document.getElementById("Bl").innerHTML = json['BloodPressure']
+                document.getElementById("Sk").innerHTML = json['SkinThickness']
+                document.getElementById("In").innerHTML = json['Insulin']
+                document.getElementById("BM").innerHTML = json['BMI']
+                document.getElementById("Di").innerHTML = json['DiabetesPedigreeFunction']
+                document.getElementById("Ag").innerHTML = json['Age']
+            },
+            error : function(xhr,errmsg,err) {
+                // alert(err);
+                // alert(errmsg);
+                // alert(xhr);
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,154 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="direction:rtl !important; float:right; font-family: 'Sahel';">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="direction:rtl !important; float:right">
+                <h5 class="modal-title" id="exampleModalLabel" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  نتایج پیش بینی:  </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="direction:rtl !important; float:right; text-align:justify;">
+                <h5 style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  ورودی های پیش بینی::  </h5><br><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> سن: <span id="ag" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> شغل: <span id="jo" style="color:black;"></span></div> <br>
+                <h5 class="pt-3">  پیش بینی حقوق دریافتی:  </h5><br>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <a class="btn btn-primary" href="{% url 'ml:regressionresultelasticnetfa' %}" role="button">مشاهده نتایج قبلی</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3" style="direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:regressionresultelasticnetfa' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    نتایج </a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/salaries.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    کد نمونه </a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/salaries.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    دیتاست </a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                 پیش بینی حقوق دریافتی
+            </h1>
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                با استفاده از مدل <u>Elastic Net Regression</u> 
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                پس از تکمیل و ارسال فرم، حداقل 10 ثانیه صبر کنید تا مدل نتایج را محاسبه نموده و نمایش دهد. 
+            </h6>
+            <form action="" id="post-form" style="direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">   
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="Age" style="direction:rtl !important; text-align:justify; float:right">سن  <small class="pl-4" style="color:#BFA181;">  (بین 23 و 65) </small> </label>
+                    <input type="number" step="1" class="form-control" id="Age" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Job" style="direction:rtl !important; text-align:justify; float:right"> شغل <small class="pl-4" style="color:#BFA181;">(0 &#8594; حسابدار , 1 &#8594; دندان پزشک, 2 &#8594; معلم دبیرستان, 3 &#8594; مهندس کامپیوتر)</small> </label>
+                    <select name="Job" id="Job" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">ارسال</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                توضیحات مدل:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                رگرسیون یک روش یادگیری ماشینی نظارت شده برای درک رابطه بین متغیرها یا ویژگی های مستقل و یک متغیر یا نتیجه وابسته است. یکی از الگوریتم هایی که برای رگرسیون استفاده می شود <a href="https://en.wikipedia.org/wiki/Elastic_net_regularization" target="_blank">“Elastic Net Regression”</a> است. <br>
+                در اینجا، ما از دیتاست <b style="color:#6E6E6E"><u>salaries.csv</u></b>  برای اهداف رگرسیونی استفاده می کنیم و می توانید مجموعه داده را از لینک بالای این صفحه دانلود کنید. <br>
+                این دیتاست دارای 2 متغیر ویژگی است: “<i style="color:#6ACFC7">سن</i>” و “<i style="color:#6ACFC7">شغل</i>” <br>
+                و متغیر پیش بینی برابر است با: “<i style="color:#6ACFC7">حقوق دریافتی</i>”. <br>
+                
+                در فرم بالا مقادیر 2 متغیر ویژگی را وارد کرده و مدل حقوق دریافتی را در یک فرم پاپ آپ برمی گرداند. از آنجایی که 1 متغیر ویژگی دیتاست ما متنی و یکی دیگر عددی است، برای استفاده از Elastic Net Regression برای این دیتاست ترکیبی، باید متغیر ویژگی متنی را به برچسب عددی تبدیل کنیم و سپس می توانیم از روش Elastic Net Regression استفاده کنیم.  <br>
+                
+                توجه داشته باشید که مقادیر و محدوده های هر متغیر ویژگی به شرح زیر است: <br>
+            
+            </p>
+            
+                <h5 class="mt-4 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><mark class="mt-2 p-1">    سن (بین 23 و 65)  </mark></h5>                                
+                <h5 class="mt-4 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><mark class="mt-2 p-1">  شغل (0 &#8594; حسابدار , 1 &#8594; دندانپزشک, 2 &#8594; معلم دبیرستان, 3 &#8594; مهندس نرم افزار) </mark></h5> 
+                <h5 class="mt-4 mb-4 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><mark class="mt-2 p-1">     حقوق دریافتی (بین 4000 و 24100)    </mark></h5> 
+                
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                کد نمونه مورد استفاده برای آموزش مدل Elastic Net Regression در لینک بالای همین صفحه ارائه شده است. هر بار که این فرم را اجرا می کنید و پیش بینی ها اتفاق می افتد، مقادیر در پایگاه داده ذخیره می شوند و با لینک "نتایج" در بالای این صفحه، نتایج قبلی پیش بینی مدل را مشاهده خواهید کرد. اجرای اخیر شما به انتهای این لیست اضافه خواهد شد.
+            
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_regression_elasticnet" %}',
+            data:{
+                Age:$('#Age').val(),
+                Job:$('#Job').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("ag").innerHTML = json['Age']
+                document.getElementById("jo").innerHTML = json['Job']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

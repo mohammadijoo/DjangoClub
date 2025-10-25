@@ -1,0 +1,42 @@
+{% extends "portfolio/base-en2.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row">
+        
+        <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            Prediction Results
+        </h1>
+
+            <table class="table text-white">
+                <thead class="text-center">
+                <tr> 
+                <th scope="col">#</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Length1</th>
+                <th scope="col">Length2 </th>
+                <th scope="col">Length3</th>
+                <th scope="col">Height</th>
+                <th scope="col">Width</th>
+                <th scope="col">Species</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.Weight }}</td>
+                    <td>{{ item.Length1 }}</td>
+                    <td>{{ item.Length2 }}</td>
+                    <td>{{ item.Length3 }}</td>
+                    <td>{{ item.Height }}</td>
+                    <td>{{ item.Width }}</td>
+                    <td>{{ item.Species }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

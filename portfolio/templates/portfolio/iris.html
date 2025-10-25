@@ -1,0 +1,38 @@
+{% extends 'portfolio/base-en.html' %}
+{% block  metaContent %}  Abolfazl Mohammadijoo, Django Club, Django Blog, Django Tutorial, Machine Learning with Python, Django Tutor, Django Video Tutorial, Deep Learning with Python  {% endblock %}
+{% block title %} Django Club  {% endblock %}
+
+{% block content %}
+{% load static %}
+
+
+  <div class="container" style="direction:ltr;">
+    <div class="row" style="margin-top:5px; font-family:'Lato', sans-serif !important; direction:ltr;" >
+        
+        <div class="col-lg-12">
+            
+            <table id="table" class="display" style="width: 100%;">
+              <thead>
+                <tr>
+                  {% for header in headers %}
+                  <th>{{ header }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {% for row in data %}
+                  <td>{{ row }}</td>
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+            
+        </div>
+ 
+        
+    </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'portfolio/base.html' %}
+{% block  metaContent %}  Abolfazl Mohammadijoo, Django Club, Django Blog, Django Tutorial, Machine Learning with Python, Django Tutor, Django Video Tutorial, Deep Learning with Python  {% endblock %}
+{% block title %} Django Club  {% endblock %}
+
+{% block cssStyle %}  
+
+a:hover {
+  color: #C3073F !important;
+}
+
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="container">
+    
+    {% if searchedfa %}
+    
+        <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+            نتایج جستجو برای:         
+            <strong style="color: #9df9ef">{{ searchedfa }}</strong>
+        </h1> <br>
+       
+    <ol>
+         
+        {% for item in SearchResults1 %}
+            <li class="text-justify text-white">
+                <a href="{% url 'article_detailfa' item.id %}" target="_blank" class="text-justify text-white">
+                    {{ item }}
+                </a>
+            </li>
+            <hr>
+        {% endfor %}
+        
+        
+        
+        {% for item in SearchResults2 %}
+            <li class="text-justify text-white">
+                <a href="{% url 'show_profile_page' item.id %}" target="_blank" class="text-justify text-white">
+                    {{ item.user.first_name }} {{ item.user.last_name }}
+                </a>
+            </li>
+            <hr>
+        {% endfor %}
+        
+        
+        
+    </ol>
+        
+    {% else %}
+    
+        <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+            
+             {{ searchedfa }}
+            هیچ کلمه جستجویی وارد نشده است.
+        </h1>
+        
+    {% endif %}
+    
+    
+    
+    
+    
+</div>
+
+
+
+
+
+{% endblock %}
+
+

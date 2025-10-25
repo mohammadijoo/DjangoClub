@@ -1,0 +1,156 @@
+{% extends "portfolio/base-en2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h5>Prediction Input:</h5>
+                <div style="color:black;">Sepal Length: <span id="sl" style="color:black;"></span></div>
+                <div style="color:black;">Sepal Width: <span id="sw" style="color:black;"></span></div>
+                <div style="color:black;">Petal Length: <span id="pl" style="color:black;"></span></div>
+                <div style="color:black;">Petal width: <span id="pw" style="color:black;"></span></div>
+                <h5 class="pt-3">Prediction Classification:</h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'ml:classificationresultsvm' %}" role="button">View Previous Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:classificationresultsvm' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Results</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/iris.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Source Code</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/iris.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Dataset</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                Iris Classification
+            </h1>
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                Using <u>Support Vector Machine</u> Classification Model
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                After submitting the form, wait at least <u>10 seconds</u>  for the model to calculate and show the result. <br> Also, all entered float numbers must have at most 2 decimal points, like: 1.23
+            </h6>
+            <form action="" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="sepal_length">Sepal Length <small class="pl-4" style="color:#BFA181;">(Between 4 and 8)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="sepal_length" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Sepal Width">Sepal Width <small class="pl-4" style="color:#BFA181;">(Between 2 and 5)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="sepal_width" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="petal_length">Petal Length <small class="pl-4" style="color:#BFA181;">(Between 1 and 7)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="petal_length" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="petal_width">Petal Width <small class="pl-4" style="color:#BFA181;">(Between 0.1 and 3)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="petal_width" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                Model Description:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                Classification is a supervised machine learning method where the model tries to predict the correct label of a given input data. One of the algorithms used for classification is <a href="https://en.wikipedia.org/wiki/Support_vector_machine" target="_blank">“Support Vector Machine”</a> or abbreviation, SVM. <br>
+                Here, we use the <b style="color:#6E6E6E"><u>iris.csv</u></b> dataset for classification purposes and you can download the dataset from the link on top of this page. This dataset has 4 features: <br>
+                “<i style="color:#6ACFC7">Sepal Length</i>”, “<i style="color:#6ACFC7">Sepal Width</i>”, “<i style="color:#6ACFC7">Petal Length</i>” and “<i style="color:#6ACFC7">Petal Width</i>” <br>
+                And the label for each item in the dataset is the type of iris flower which has 3 values:  <br>
+                “<i style="color:#6ACFC7">Iris Setosa</i>”, “<i style="color:#6ACFC7">Iris Versicolor</i>” and “<i style="color:#6ACFC7">Iris Virginica</i>”. <br>
+                In the above form, you enter the values of 4 features and the model returns the type of iris flower in a pop-up form. Notice that the range of each feature is as below: <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 4 < sepal length < 8  </span> <br>                             
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 2 < sepal width < 5  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 1 < petal length < 7  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0.1 < petal width < 3  </span> <br>
+                The sample code used to train a “svm” classification model, is provided in the link on top of this page. Each time you run this form and classification predictions happen, the values will store in the database, and with the link “result” on top of this page, you will see the previous results of the model prediction. Your recent run will be added to the end of this list.
+            
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_classification_svm" %}',
+            data:{
+                sepal_length:$('#sepal_length').val(),
+                sepal_width:$('#sepal_width').val(),
+                petal_length:$('#petal_length').val(),
+                petal_width:$('#petal_width').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("sl").innerHTML = json['sepal_length']
+                document.getElementById("sw").innerHTML = json['sepal_width']
+                document.getElementById("pl").innerHTML = json['petal_length']
+                document.getElementById("pw").innerHTML = json['petal_width']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

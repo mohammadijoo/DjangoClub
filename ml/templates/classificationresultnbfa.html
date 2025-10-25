@@ -1,0 +1,40 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row" style="direction:rtl !important; font-family: 'Sahel';">
+        
+        <h1 style="direction:rtl !important;  font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            نتایج پیش بینی ها
+        </h1>
+
+            <table class="table text-white" style="font-family: 'Sahel';">
+                <thead class="text-center" style="direction:rtl !important;  font-family: 'Sahel';">
+                <tr> 
+                <th scope="col">#</th>
+                <th scope="col">سن</th>
+                <th scope="col">جنسیت</th>
+                <th scope="col"> فشار خون </th>
+                <th scope="col"> کلسترول </th>
+                <th scope="col"> نسبت سدیم به پتاسیم </th>
+                <th scope="col"> نوع دارو </th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.Age }}</td>
+                    <td>{{ item.Sex }}</td>
+                    <td>{{ item.BP }}</td>
+                    <td>{{ item.Cholesterol }}</td>
+                    <td>{{ item.Na_to_K }}</td>
+                    <td>{{ item.Drug }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

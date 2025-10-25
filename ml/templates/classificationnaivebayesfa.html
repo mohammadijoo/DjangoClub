@@ -1,0 +1,175 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="direction:rtl !important; float:right; font-family: 'Sahel';">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="direction:rtl !important; float:right">
+                <h5 class="modal-title" id="exampleModalLabel" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  نتایج پیش بینی:  </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="direction:rtl !important; float:right; text-align:justify;">
+                <h5 style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  ورودی های طبقه بندی:  </h5><br><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">سن: <span id="ag" style="color:black;"></span></div><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">جنسیت: <span id="se" style="color:black;"></span></div><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">فشار خون: <span id="bp" style="color:black;"></span></div><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> کلسترول: <span id="ch" style="color:black;"></span></div><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> نسبت سدیم به پتاسیم: <span id="ntk" style="color:black;"></span></div><br>
+                <h5 class="pt-3" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;"> نتیجه پیش بینی نوع دارو:  </h5><br>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"> بستن </button>
+                <a class="btn btn-primary" href="{% url 'ml:classificationresultnbfa' %}" role="button">  مشاهده نتایج قبلی </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3" style="direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:classificationresultnbfa' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    نتایج</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/drug200.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    کد نمونه</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/drug200.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    دیتاست</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                طبقه بندی انواع داروهای تجویزی 
+            </h1>
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                با استفاده از مدل <u>Naïve Bayes</u> 
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                پس از تکمیل و ارسال فرم، حداقل 10 ثانیه صبر کنید تا مدل نتایج را محاسبه نموده و نمایش دهد. <br> همچنین، تمام اعداد اعشاری وارد شده باید حداکثر 2 رقم اعشار داشته باشند، مانند: 1.23
+            </h6>
+            <form action="" id="post-form" style="direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="Age" style="direction:rtl !important; text-align:justify; float:right">سن <small class="pr-4" style="color:#BFA181;">  (بین 15 و 75) </small></label>
+                    <input type="number" class="form-control" id="Age" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Sex" style="direction:rtl !important; text-align:justify; float:right"> جنسیت  <small class="pr-4" style="color:#BFA181;">(0 &#8594; زن , 1 &#8594; مرد)</small> </label>
+                    <select name="Sex" id="Sex" form="post-form" class="form-control" required>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="BP" style="direction:rtl !important; text-align:justify; float:right"> فشار خون <small class="pr-4" style="color:#BFA181;">(0 &#8594 بالا , 1 &#8594 پائین, 2 &#8594 نرمال)</small> </label>
+                    <select name="BP" id="BP" form="post-form" class="form-control" required>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Cholesterol" style="direction:rtl !important; text-align:justify; float:right"> کلسترول <small class="pr-4" style="color:#BFA181;">(0 &#8594; بالا , 1 &#8594; نرمال)</small> </label>
+                    <select name="Cholesterol" id="Cholesterol" form="post-form" class="form-control" required>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Na_to_K" style="direction:rtl !important; text-align:justify; float:right"> نسبت سدیم به پتاسیم <small class="pr-4" style="color:#BFA181;"> (بین 6.2 و 38.3) </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Na_to_K" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">ارسال</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                توضیحات مدل:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                طبقه بندی یک روش یادگیری ماشینی نظارت شده است که در آن مدل سعی می کند برچسب صحیح یک داده ورودی داده شده را پیش بینی کند. یکی از الگوریتم های مورد استفاده برای طبقه بندی <a href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier" target="_blank">“Naïve Bayes Classifier”</a> می باشد. <br>
+                در اینجا، ما از دیتاست <b style="color:#6E6E6E"><u>drug200.csv</u></b>  برای اهداف طبقه بندی استفاده می کنیم و می توانید مجموعه داده را از لینک بالای این صفحه دانلود کنید. این مجموعه داده دارای 5 ویژگی است: <br> 
+                “<i style="color:#6ACFC7">Age</i>”, “<i style="color:#6ACFC7">Sex</i>”, “<i style="color:#6ACFC7">Blood Pressure</i>”, “<i style="color:#6ACFC7">Cholesterol</i>”, “<i style="color:#6ACFC7">Sodium to Potassium Ratio</i>” <br>
+                و متغیر پیش بینی برای هر مورد در دیتاست، نوع دارویی است که باید مصرف کنید، که دارای 5 مقدار است: <br>
+                “<i style="color:#6ACFC7">drugX</i>”, “<i style="color:#6ACFC7">DrugY</i>”, “<i style="color:#6ACFC7">drugA</i>”, “<i style="color:#6ACFC7">drugB</i>”, “<i style="color:#6ACFC7">drugC</i>”. <br>
+                در فرم بالا، مقادیر 5 ویژگی را وارد می‌کنید و مدل، نوع دارویی را که باید مصرف کنید را در یک فرم پاپ آپ برمی‌گرداند. از آنجایی که 3 متغیر ویژگی از دیتاست ما متنی و 2 مورد از آنها عددی است، برای استفاده از Naïve Bayes برای این مجموعه داده ترکیبی، باید متغیرهای ویژگی دسته بندی را به برچسب های عددی تبدیل کنیم و سپس می توانیم از طبقه بندی کننده  Naïve Bayes استفاده کنیم. <br>
+                توجه داشته باشید که مقادیر و محدوده های هر متغیر ویژگی به شرح زیر است: <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> سن (بین 15 و 75)  </span> <br>                                 
+                <span class="badge m-2 p-2" style="background-color: #213F99"> جنسیت (0 → زن , 1 → مرد)  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> فشار خون (0 → بالا , 1 → پائین, 2 → نرمال)   </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> کلسترول (0 → بالا , 1 → نرمال)  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> نسبت سدیم به پتاسیم (بین 6.2 و 38.3)  </span> <br>
+                کد نمونه مورد استفاده برای آموزش مدل طبقه‌بندی “Naïve Bayes” در لینک بالای این صفحه ارائه شده است. هر بار که این فرم را اجرا می کنید و پیش بینی های طبقه بندی اتفاق می افتد، مقادیر در پایگاه داده ذخیره می شوند و با لینک "نتایج" در بالای این صفحه، نتایج قبلی پیش بینی مدل را مشاهده خواهید کرد. اجرای اخیر شما به انتهای این لیست اضافه خواهد شد.
+            
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_classification_nb" %}',
+            data:{
+                Age:$('#Age').val(),
+                Sex:$('#Sex').val(),
+                BP:$('#BP').val(),
+                Cholesterol:$('#Cholesterol').val(),
+                Na_to_K:$('#Na_to_K').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("ag").innerHTML = json['Age']
+                document.getElementById("se").innerHTML = json['Sex']
+                document.getElementById("bp").innerHTML = json['BP']
+                document.getElementById("ch").innerHTML = json['Cholesterol']
+                document.getElementById("ntk").innerHTML = json['Na_to_K']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

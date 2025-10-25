@@ -1,0 +1,52 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Edit Blog Post   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">  
+        Delete Blog Post 
+    </h1>
+    
+    {% if user.is_authenticated and user.username == post.author.username %}
+    
+    <h3 class="text-white mt-2 mb-2">  Delete: {{ post.title }} </h3>
+    <br>
+    
+    <div class="form-group">
+        <form method='POST'>
+            {% csrf_token %}
+            <strong> Are you sure?! </strong> <br><br>
+            <button class="btn btn-secondary"> Delete Post </button>
+        </form>
+    </div>
+    
+    {% else %}
+    
+        <h1 class="text-white mt-4 mb-4"> 
+            You Are not Authenticated to Delete Posts! 
+        </h1>
+    
+    {% endif %}
+    
+    
+    
+</div>
+
+
+{% endblock %}
+
+
+

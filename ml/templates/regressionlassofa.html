@@ -1,0 +1,227 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="direction:rtl !important; float:right; font-family: 'Sahel';">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="direction:rtl !important; float:right">
+                <h5 class="modal-title" id="exampleModalLabel" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  نتایج پیش بینی:  </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="direction:rtl !important; float:right; text-align:justify;">
+                <h5 style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  ورودی های طبقه بندی:  </h5><br><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">قیرات: <span id="ca" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">برش: <span id="cu" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">رنگ: <span id="co" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">شفافیت: <span id="cl" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">عمق: <span id="de" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">  نسبت عرض (Table):  <span id="ta" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">X: <span id="xx" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">Y: <span id="yy" style="color:black;"></span></div> <br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">Z: <span id="zz" style="color:black;"></span></div> <br>
+                <h5 class="pt-3">  نتیجه پیش بینی قیمت الماس:  </h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <a class="btn btn-primary" href="{% url 'ml:regressionresultlassofa' %}" role="button">مشاهده نتایج قبلی</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:regressionresultlassofa' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    نتایج </a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/diamonds.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    کد نمونه  </a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/diamonds.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    دیتاست  </a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                پیش بینی قیمت الماس
+            </h1>
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                با استفاده از مدل <u>Lasso Regression</u> 
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                پس از تکمیل و ارسال فرم، حداقل 10 ثانیه صبر کنید تا مدل نتایج را محاسبه نموده و نمایش دهد. <br> همچنین، تمام اعداد اعشاری وارد شده باید حداکثر 2 رقم اعشار داشته باشند، مانند: 1.23
+            </h6>
+            <form action="" id="post-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="carat" style="direction:rtl !important; text-align:justify; float:right">قیرات <small class="pr-4" style="color:#BFA181;">  (بین 0.2 و 5.01)   </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="carat" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="depth" style="direction:rtl !important; text-align:justify; float:right">عمق <small class="pr-4" style="color:#BFA181;">   (بین 43 و 79)   </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="depth" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="table" style="direction:rtl !important; text-align:justify; float:right">نسب عرضی (Table) <small class="pr-4" style="color:#BFA181;">    (بین 43 و 95)    </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="table" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="x" style="direction:rtl !important; text-align:justify; float:right">X <small class="pr-4" style="color:#BFA181;">  (بین 0 و 10.74)  </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="x" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="y" style="direction:rtl !important; text-align:justify; float:right">Y <small class="pr-4" style="color:#BFA181;">  (بین 0 و 58.9)    </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="y" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="z" style="direction:rtl !important; text-align:justify; float:right">Z <small class="pr-4" style="color:#BFA181;">   (بین 0 و 31.8)     </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="z" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="cut" style="direction:rtl !important; text-align:justify; float:right"> برش <small class="pr-4" style="color:#BFA181;">(0 &#8594; معمولی , 1 &#8594; خوب, 2 &#8594; ایده آل, 3 &#8594; ویژه, 4 &#8594; خیلی خوب)</small> </label>
+                    <select name="cut" id="cut" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="color" style="direction:rtl !important; text-align:justify; float:right"> رنگ الماس (بهترین رنگ D و بدترین رنگ J) <small class="pr-4" style="color:#BFA181;">0 &#8594; D  , 1 &#8594; E, 2 &#8594; F, 3 &#8594; G, 4 &#8594; H, 5 &#8594; I, 6 &#8594; J  </small> </label>
+                    <select name="color" id="color" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="clarity" style="direction:rtl !important; text-align:justify; float:right">شفافیت <small class="pr-4" style="color:#BFA181;">(0 &#8594; I1 , 1 &#8594; IF, 2 &#8594; SI1, 3 &#8594; SI2, 4 &#8594; VS1, 5 &#8594; VS2, 6 &#8594; VVS1, 7 &#8594; VVS2)</small> </label>
+                    <select name="clarity" id="clarity" form="post-form" class="form-control" required>
+                      <option value="0">0</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                    </select>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">ارسال</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                توضیحات مدل:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                رگرسیون یک روش یادگیری ماشینی نظارت شده برای درک رابطه بین متغیرها یا ویژگی های مستقل و یک متغیر یا نتیجه وابسته است. یکی از الگوریتم‌هایی که برای رگرسیون استفاده می‌شود، <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)" target="_blank">“Lasso Regression”</a> است. <br>
+                
+                در اینجا، ما از دیتاست <b style="color:#6E6E6E"><u>diamonds.csv</u></b>  برای اهداف رگرسیونی استفاده می کنیم و می توانید این دیتاست را از لینک بالای این صفحه دانلود کنید. این مجموعه داده دارای 9 متغیر ویژگی است: <br>
+                “<i style="color:#6ACFC7">قیرات</i>”, “<i style="color:#6ACFC7">برش</i>”, “<i style="color:#6ACFC7">رنگ</i>”, 
+                “<i style="color:#6ACFC7">شفافیت</i>”, “<i style="color:#6ACFC7">عمق</i>”, “<i style="color:#6ACFC7">  نسبت عرضی (Table) </i>”, 
+                “<i style="color:#6ACFC7">x</i>”, “<i style="color:#6ACFC7">y</i>” و “<i style="color:#6ACFC7">z</i>” <br>
+                و متغیر پیش بینی برابر است با: “<i style="color:#6ACFC7"> قیمت الماس  </i>”.  <br>
+                در فرم بالا مقادیر 9 متغیر ویژگی را وارد کرده و مدل قیمت الماس را در یک فرم پاپ آپ برمی گرداند. از آنجایی که قیمت الماس در مجموعه داده از 326 دلار تا 18823 دلار است، هنگامی که مقادیر متغیرهای ویژگی را در فرم وارد می کنید، این امکان وجود دارد که اعداد منفی کوچک برگردانده شده توسط مدل lasso مانند: 50- دلار. بنابراین تمام قیمت های منفی کوچک را به 0 تبدیل کردیم.  <br>
+                همچنین 3 متغیر ویژگی از دیتاست ما متنی و 6 مورد از آنها عددی هستند. از این رو، برای استفاده از رگرسیون Lasso برای این دیتاست ترکیبی، باید متغیرهای ویژگی‌ متنی را به برچسب‌های عددی تبدیل کنیم و سپس می‌توانیم از روش رگرسیون کمند استفاده کنیم.  <br>
+                
+                توجه داشته باشید که مقادیر و محدوده های هر متغیر ویژگی به شرح زیر است:  <br>  
+            
+            </p>
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>قیرات: </strong> وزن الماس     <mark class="">   (بین 0.2 و 5.01)  </mark>                 </h5>
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>برش: </strong> کیفیت برش الماس     <mark class=""> 0 → معمولی , 1 → خوب, 2 → ایده آل, 3 → ویژه, 4 → خیلی خوب  </mark>         </h5> 
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong> رنگ الماس:   </strong> (بهترین رنگ D و بدترین رنگ J)     <mark class="">0 → D ,  1 → E, 2 → F,  3 → G, 4 → H, 5 → I, 6 → J  </mark>         </h5>
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>شفافیت: </strong>  اندازه گیری شفافیت الماس →   <mark class="">I1 (بدترین), SI2, SI1, VS2, VS1, VVS2, VVS1, IF (بهترین)  </mark>         </h5>
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>X:</strong> طول به میلی متر        <mark class="">    (بین 0 و 10.74)    </mark>        </h5> 
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>Y:</strong>  عرض به میلی متر          <mark class="">     (بین 0 و 58.9)     </h5>
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>Z:</strong> عمق به میلی متر        <mark class="">     (بین 0 و 31.8)     </mark>       </h5>
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>عرض: </strong> درصد عمق کل = z / mean(x, y) = 2 * z / (x + y)         <mark class="">  (بین 43 و 79)  </mark>       </h5>   
+                <h5 class="mt-3 text-white text-right" style="font-family: 'Sahel', 'BTeraffic';"><strong>Table:</strong> عرض بالای الماس نسبت به عریض ترین نقطه         <mark class="">   (بین 43 و 95)  </mark>      </h5>       
+                
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                نمونه کد مورد استفاده برای آموزش مدل رگرسیون Lasso در لینک بالای همین صفحه ارائه شده است. هر بار که این فرم را اجرا می کنید و پیش بینی ها اتفاق می افتد، مقادیر در پایگاه داده ذخیره می شوند و با لینک "نتایج" در بالای این صفحه، نتایج قبلی پیش بینی مدل را مشاهده خواهید کرد. اجرای اخیر شما به انتهای این لیست اضافه خواهد شد.
+            
+            </p>
+            
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_regression_lasso" %}',
+            data:{
+                carat:$('#carat').val(),
+                cut:$('#cut').val(),
+                color:$('#color').val(),
+                clarity:$('#clarity').val(),
+                depth:$('#depth').val(),
+                table:$('#table').val(),
+                x:$('#x').val(),
+                y:$('#y').val(),
+                z:$('#z').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("ca").innerHTML = json['carat']
+                document.getElementById("cu").innerHTML = json['cut']
+                document.getElementById("co").innerHTML = json['color']
+                document.getElementById("cl").innerHTML = json['clarity']
+                document.getElementById("de").innerHTML = json['depth']
+                document.getElementById("ta").innerHTML = json['table']
+                document.getElementById("xx").innerHTML = json['x']
+                document.getElementById("yy").innerHTML = json['y']
+                document.getElementById("zz").innerHTML = json['z']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

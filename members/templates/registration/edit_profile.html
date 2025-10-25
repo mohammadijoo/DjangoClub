@@ -1,0 +1,48 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Edit Your Profile   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <h1 style="font-family: 'Caveat Brush', cursive; font-size:3rem; color:#DCC7AA" class="mt-4 mb-4 text-center">
+        Edit Settings
+    </h1>
+    <br><br>
+        
+    <div class="form-group">
+        <form method='POST'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <button class="btn btn-secondary"> Update Profile </button>
+        </form>
+    </div>
+    
+    <hr><br>
+    
+    <h5 class="text-justify mt-5 pt-5 pr-2 pl-2" style="color:#e1e8f0"> 
+        <strong> Notice: </strong> <br>
+        If you want to collaborate with Django Club’s Blog as an author, please send your request and your resume or portfolio link to  <a href="mailto:info@django3.ir">info@django3.ir</a> and the admin will authorize you as an author. The 'Add Post' will show up in the navbar for authors, and you can use it to submit your article. Your articles should be confirmed by the admin before publishing. After publishing your post, you can edit it at any time and your biography and social links would be below your blog articles. Looking forward to hearing from you passionate programmers.
+    </h5>
+    
+</div>
+
+
+{% endblock %}
+
+
+

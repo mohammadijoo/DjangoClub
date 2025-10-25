@@ -1,0 +1,48 @@
+{% extends "portfolio/base-en.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row">
+        
+        <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+            Prediction Results
+        </h1>
+
+            <table class="table text-white">
+                <thead class="text-center">
+                <tr> 
+                <th scope="col">#</th>  
+                <th scope="col">RI</th>
+                <th scope="col">Na</th>
+                <th scope="col"> Mg </th>
+                <th scope="col">Al</th>
+                <th scope="col">Si</th>
+                <th scope="col">K</th>
+                <th scope="col">Ca</th>
+                <th scope="col">Ba</th>
+                <th scope="col">Fe</th>
+                <th scope="col">Type</th>
+                </tr>
+                </thead>
+                <tbody class="text-center">
+                {% for item in dataset %}  
+                    <tr>
+                    <th scope="row">{{ item.id }}</th>
+                    <td>{{ item.RI }}</td>
+                    <td>{{ item.Na }}</td>
+                    <td>{{ item.Mg }}</td>
+                    <td>{{ item.Al }}</td>
+                    <td>{{ item.Si }}</td>
+                    <td>{{ item.K }}</td>
+                    <td>{{ item.Ca }}</td>
+                    <td>{{ item.Ba }}</td>
+                    <td>{{ item.Fe }}</td>
+                    <td>{{ item.Type }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

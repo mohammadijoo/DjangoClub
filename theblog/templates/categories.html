@@ -1,0 +1,57 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Django Club's Blog   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    
+ 
+ {% if category_posts %}
+ 
+    <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+        {{ cats }} Category
+    </h1>
+    
+    <ul>   
+    
+    {% for post in category_posts %}
+    
+    <li style="text-align:justify">
+        <a href="{% url 'article_detail' post.pk %}"> {{ post.title }} </a> | {{ post.author.first_name }} {{ post.author.last_name }} |  {{ post.post_date }} |
+        
+        {% if user.is_authenticated and user.is_superuser %}
+        <small> 
+            <a href="{% url 'update_post' post.pk %}"> Edit </a> | 
+            <a href="{% url 'delete_post' post.pk %}"> Delete </a>
+        </small>
+        {% endif %}
+        
+        <br>
+        {{ post.snippet }}
+    </li>
+  
+    {% endfor %}
+
+    </ul>
+
+{% else %}
+
+    <h1 style="font-family: 'Caveat Brush', cursive;" class="text-center text-white mt-4 mb-4">
+        Sorry, There is No Post for This Category.
+    </h1>
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+
+{% endblock %}

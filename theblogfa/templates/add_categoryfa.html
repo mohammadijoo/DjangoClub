@@ -1,0 +1,64 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %} Create A Blog Category   {% endblock %}
+
+{% block  metaContent %}    {% endblock %}
+
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container" style="direction:rtl">
+    <h1 style="font-family: 'Sahel';" class="text-center text-white mt-4 mb-4">
+        افزودن طبقه بندی
+    </h1>
+    <br><br>
+    
+    {% if user.is_authenticated %}
+    
+        {% if user.is_superuser or user.is_staff  %}
+    
+            <div class="form-group text-right" style="direction:rtl">
+                <form method='POST' style="direction:rtl">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    <button class="btn btn-secondary"> افزودن طبقه بندی </button>
+                </form>
+            </div>
+            <br>
+            <h3 class="text-white mt-4 mb-4 text-justify" style="font-family: 'Sahel';"> 
+            توجه کنید که عنوان طبقه بندی باید حتما به زبان انگلیسی باشد. 
+            </h3>
+    
+        {% endif %}
+        
+    {% else %}
+    
+        <h1 class="text-white mt-4 mb-4"> 
+            You Are not Authenticated to Add Categories! 
+        </h1>
+    
+    {% endif %}
+    
+    <script>
+        document.getElementById()
+    </script>
+    
+    
+</div>
+
+
+
+
+
+{% endblock %}

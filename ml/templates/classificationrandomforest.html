@@ -1,0 +1,198 @@
+{% extends "portfolio/base-en2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Prediction Results</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">    
+                <h5>Prediction Input:</h5>
+                <div style="color:black;">RI: <span id="RI1" style="color:black;"></span></div>
+                <div style="color:black;">Na: <span id="Na1" style="color:black;"></span></div>
+                <div style="color:black;">Mg: <span id="Mg1" style="color:black;"></span></div>
+                <div style="color:black;">Al: <span id="Al1" style="color:black;"></span></div>
+                <div style="color:black;">Si: <span id="Si1" style="color:black;"></span></div>
+                <div style="color:black;">K: <span id="K1" style="color:black;"></span></div>
+                <div style="color:black;">Ca: <span id="Ca1" style="color:black;"></span></div>
+                <div style="color:black;">Ba: <span id="Ba1" style="color:black;"></span></div>
+                <div style="color:black;">Fe: <span id="Fe1" style="color:black;"></span></div>
+                <h5 class="pt-3">Prediction Classification:</h5>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary" href="{% url 'ml:classificationresultrf' %}" role="button">View Previous Results</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:classificationresultrf' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Results</a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/glass.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Source Code</a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/glass.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    Dataset</a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 ">
+                Glass Classification
+            </h1>
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                Using <u>Random Forest</u> Classification Model
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                After submitting the form, wait at least <u style="color:red">20 seconds</u>  for the model to calculate and show the result. <br> Also, all entered float numbers must have at most 2 decimal points, like: 1.23
+            </h6>
+            <form action="" id="post-form">  
+                {% csrf_token %}
+                <div class="form-group"> 
+                    <label for="RI">RI: Refractive Index <small class="pl-4" style="color:#BFA181;">(Between 1.51 and 1.53)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="RI" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Na">Na: Sodium  <small class="pl-4" style="color:#BFA181;">(Between 10.73 and 17.38)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Na" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Mg">Mg: Magnesium <small class="pl-4" style="color:#BFA181;">(Between 0 and 4.49)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Mg" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Al">Al: Aluminum <small class="pl-4" style="color:#BFA181;">(Between 0.29 and 3.5)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Al" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Si">Si: Silicon <small class="pl-4" style="color:#BFA181;">(Between 69.81 and 75.41)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Si" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="K">K: Potassium <small class="pl-4" style="color:#BFA181;">(Between 0 and 6.21)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="K" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Ca">Ca: Calcium <small class="pl-4" style="color:#BFA181;">(Between 5.43 and 16.19)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Ca" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Ba">Ba: Barium <small class="pl-4" style="color:#BFA181;">(Between 0 and 3.15)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Ba" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label for="Fe">Fe: Iron <small class="pl-4" style="color:#BFA181;">(Between 0 and 0.51)</small> </label>
+                    <input type="number" step="0.01" class="form-control" id="Fe" placeholder="" required>
+                </div>
+                
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                Model Description:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify">
+                
+                Classification is a supervised machine learning method where the model tries to predict the correct label of a given input data. One of the algorithms used for classification is the <a href="https://en.wikipedia.org/wiki/Random_forest" target="_blank">“Random Forest Classifier”</a>. <br>
+                Here, we use the <b style="color:#6E6E6E"><u>glass.csv</u></b> dataset for classification purposes and you can download the dataset from the link on top of this page. This dataset has 9 features: <br>
+                “<i style="color:#6ACFC7">RI</i>”, “<i style="color:#6ACFC7">Na</i>”, “<i style="color:#6ACFC7">Mg</i>”, “<i style="color:#6ACFC7">Al</i>”, “<i style="color:#6ACFC7">Si</i>”, “<i style="color:#6ACFC7">K</i>”, “<i style="color:#6ACFC7">Ca</i>”, “<i style="color:#6ACFC7">Ba</i>” and “<i style="color:#6ACFC7">Fe</i>” <br>
+                And the label for each item in the dataset is the type of Glass, which has 6 values: <br>
+                “<i style="color:#6ACFC7">Building Windows Float Processed</i>”, “<i style="color:#6ACFC7">Building Windows Non-Float Processed</i>”, “<i style="color:#6ACFC7">Vehicle Windows Float Processed</i>”, “<i style="color:#6ACFC7">Containers</i>”, “<i style="color:#6ACFC7">Tableware</i>” and “<i style="color:#6ACFC7">Headlamps</i>”. <br>
+                In the above form, you enter the values of 9 features, mostly chemical elements amount, and the model returns the type of glass in a pop-up form. The Random Forest Classifier takes more time than other models for calculation and you need to wait more to see the results in pop-up form.  <br>
+                Notice that the values and ranges of each feature are as below: <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 1.51 < RI: Refractive Index < 1.53  </span> <br>                                 
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 10.73 < Na: Sodium < 17.38 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Mg: Magnesium < 4.49  </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0.29 < Al: Aluminum < 3.5 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 69.81 < Si: Silicon < 75.41 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < K: Potassium < 6.21 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 5.43 < Ca: Calcium < 16.19 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Ba: Barium < 3.15 </span> <br>
+                <span class="badge m-2 p-2" style="background-color: #213F99"> 0 < Fe: Iron < 0.51 </span> <br>
+                The sample code used to train a “Random Forest” classification model, is provided in the link on top of this page. Each time you run this form and classification predictions happen, the values will store in the database, and with the link “result” on top of this page, you will see the previous results of the model prediction. Your recent run will be added to the end of this list.   
+            
+            </p>
+            
+        </div>
+        
+        
+        
+        
+        
+    </div>
+</div>
+
+<script>
+    $(document).on('submit', '#post-form',function(e){
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{% url "ml:submit_classification_rf" %}',  
+            data:{
+                RI:$('#RI').val(),
+                Na:$('#Na').val(),
+                Mg:$('#Mg').val(),
+                Al:$('#Al').val(),
+                Si:$('#Si').val(),
+                K:$('#K').val(),
+                Ca:$('#Ca').val(),
+                Ba:$('#Ba').val(),
+                Fe:$('#Fe').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                action: 'post'
+            },
+            success:function(json) {
+                document.forms["post-form"].reset();
+                document.getElementById("prediction").innerHTML = json['result']
+                document.getElementById("RI1").innerHTML = json['RI']
+                document.getElementById("Na1").innerHTML = json['Na']
+                document.getElementById("Mg1").innerHTML = json['Mg']
+                document.getElementById("Al1").innerHTML = json['Al']
+                document.getElementById("Si1").innerHTML = json['Si']
+                document.getElementById("K1").innerHTML = json['K']
+                document.getElementById("Ca1").innerHTML = json['Ca']
+                document.getElementById("Ba1").innerHTML = json['Ba']
+                document.getElementById("Fe1").innerHTML = json['Fe']
+            },
+            error : function(xhr,errmsg,err) {
+
+            }
+        });
+    })
+</script>
+
+{% endblock %}
+

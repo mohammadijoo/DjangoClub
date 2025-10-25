@@ -1,0 +1,34 @@
+{% extends "portfolio/base-en.html" %}
+
+{% block content %}
+    <div class="container pt-5" style="overflow-x: scroll !important; ">
+        <div class="row">
+        
+        <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-1 mb-3">
+            Submitted Values <br>
+        </h1>
+        <div class="col-lg-12 text-center">
+            
+            <span class="badge m-3 p-2" style="background-color:red"> RI : {{RI}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Na : {{Na}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Mg : {{Mg}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Al : {{Al}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Si : {{Si}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> K : {{K}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Ca : {{Ca}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Ba : {{Ba}} </span>
+            <span class="badge m-3 p-2" style="background-color:red"> Fe : {{Fe}} </span><br>
+            
+            <h1 style="font-family: 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class=" mt-1 mb-3">
+                Prediction Results (Glass Type) <br>
+            </h1>
+    
+            <h3 style="font-size:1.5rem" class="text-white text-center mt-1 mb-3">
+                Type: {{ Type }}
+            </h3>
+        
+        </div>
+        
+        </div>
+    </div>
+{% endblock %}

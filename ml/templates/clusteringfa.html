@@ -1,0 +1,47 @@
+{% extends "portfolio/base-en2.html" %}
+{% load static%}
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+ 
+
+<div class="container pt-3">
+    <div class="row ">
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> K-Means Clustering </h2>
+            <a href="{% url 'ml:clusteringkmeans' %}" target="_blank">
+                <img src="{% static 'ml/k_means_clustering.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> DBSCAN Clustering  </h2>
+            <a href="{% url 'ml:clusteringdbscan' %}" target="_blank">
+                <img src="{% static 'ml/dbscan_clustering.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h3 class="text-center text-white"> Divisive Hierarchical Clustering </h3>
+            <a href="{% url 'ml:clusteringdivisive' %}" target="_blank">
+                <img src="{% static 'ml/divisive_hierarchical_clustering.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h3 class="text-center text-white"> Agglomerative Hierarchical Clustering </h3>
+            <a href="{% url 'ml:clusteringagglomerative' %}" target="_blank">
+                <img src="{% static 'ml/agglomerative_hierarchical_clustering.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+{% endblock %}
+

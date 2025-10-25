@@ -1,0 +1,96 @@
+{% extends "portfolio/base-en2.html" %}
+{% load static%}
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+ 
+
+<div class="container pt-3">
+    <div class="row ">
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Multilayer Perceptrons </h2>
+            <a href="{% url 'ml:neuralnetworkperceptron' %}" target="_blank">
+                <img src="{% static 'ml/multilayer_perceptron.png' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Recurrent Neural Network </h2>
+            <a href="{% url 'ml:neuralnetworkrecurrent' %}" target="_blank">
+                <img src="{% static 'ml/recurrent_neural_network.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Convolutional Neural Network </h2>
+            <a href="{% url 'ml:neuralnetworkconvolutional' %}" target="_blank">
+                <img src="{% static 'ml/convolutional_neural_network.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Autoencoder </h2>
+            <a href="{% url 'ml:neuralnetworkautoencoder' %}" target="_blank">
+                <img src="{% static 'ml/autoencoder.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Deep Belief Network </h2>
+            <a href="{% url 'ml:neuralnetworkdeepbelief' %}" target="_blank">
+                <img src="{% static 'ml/deep_belief_network.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Long Short-Term Memory </h2>
+            <a href="{% url 'ml:neuralnetworklstm' %}" target="_blank">
+                <img src="{% static 'ml/long_short_term_memory.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Restricted Boltzmann Machine </h2>
+            <a href="{% url 'ml:neuralnetworkboltzman' %}" target="_blank">
+                <img src="{% static 'ml/restricted_boltzmann_machines.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> LightGBM </h2>
+            <a href="{% url 'ml:neuralnetworklightgbm' %}" target="_blank">
+                <img src="{% static 'ml/lightgbm.png' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> AdaBoost </h2>
+            <a href="{% url 'ml:neuralnetworkadaboost' %}" target="_blank">
+                <img src="{% static 'ml/adaboost.png' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> XGBoost </h2>
+            <a href="{% url 'ml:neuralnetworkxgboost' %}" target="_blank">
+                <img src="{% static 'ml/xgboost.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+        <div class="col-lg-6 justify-content-md-center text-center p-4">
+            <h2 class="text-center text-white"> Generative Adversarial Networks </h2>
+            <a href="{% url 'ml:neuralnetworkgans' %}" target="_blank">
+                <img src="{% static 'ml/Generative-Adversarial-Networks.jpg' %}" style="width:100%">
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,86 @@
+{% extends 'portfolio/base-en.html' %}
+
+{% block title %} Edit Profile Page  {% endblock %}
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 15rem !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <h1 style="font-family: 'Caveat Brush', cursive; color:#DCC7AA" class="text-center mt-4 mb-4">
+        Edit Profile
+    </h1>
+    <br>
+    
+    {% if user.is_authenticated  %}
+        {% if user.id == profile.user.id  %}
+            <div class="form-group">
+                <form method='POST' enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    
+                    
+                    <button class="btn btn-secondary"> Update Profile Page </button>
+                </form>
+            </div>
+            
+            <script>
+                document.getElementById("id_bio").className = "form-control";  
+                document.getElementById("id_phone").className = "form-control";
+                document.getElementById("id_skills").className = "form-control";
+                document.getElementById("id_hobby").className = "form-control";
+                document.getElementById("id_website_url").className = "form-control";
+                document.getElementById("id_linkedin_url").className = "form-control";
+                document.getElementById("id_github_url").className = "form-control";
+                document.getElementById("id_stackoverflow_url").className = "form-control";
+                document.getElementById("id_instagram_url").className = "form-control";
+                document.getElementById("id_twitter_url").className = "form-control";
+                
+                document.getElementById("id_skills").placeholder = "Like: C#, Python, JavaScript, Java, Matlab, SolidWorks, Proteus, ...."; 
+                document.getElementById("id_hobby").placeholder = "Like: Mountain Climbing, Music, Hiking, Book Reading, Cinema, ..."; 
+                document.getElementById("id_website_url").placeholder = "Always write complete url with https.   like:   https://google.com"; 
+                document.getElementById("id_linkedin_url").placeholder = "Always write complete url with https.   like:   https://google.com";
+                document.getElementById("id_github_url").placeholder = "Always write complete url with https.   like:   https://google.com";
+                document.getElementById("id_stackoverflow_url").placeholder = "Always write complete url with https.   like:   https://google.com";
+                document.getElementById("id_instagram_url").placeholder = "Always write complete url with https.   like:   https://google.com";
+                document.getElementById("id_twitter_url").placeholder = "Always write complete url with https.   like:   https://google.com";
+            </script>
+            
+        {% else %}    
+            <h1 class="text-white mt-4 mb-4"> 
+                You Are not Authenticated to Edit This Page! 
+            </h1>
+        {% endif %}    
+    
+    {% else %}
+    
+        <hr><br>
+    
+        <h1 class="text-white mt-4 mb-4"> 
+            You Are not Authenticated to Edit This Page! 
+        </h1>
+    
+    {% endif %}
+    
+    <hr><br>
+    
+    <h5 class="text-justify mt-5 pt-5 pr-2 pl-2" style="color:#e1e8f0"> 
+        <strong> Notice: </strong> <br>
+        If you want to collaborate with Django Club’s Blog as an author, please send your request and your resume or portfolio link to  <a href="mailto:info@django3.ir">info@django3.ir</a> and the admin will authorize you as an author. The 'Add Post' will show up in the navbar for authors, and you can use it to submit your article. Your articles should be confirmed by the admin before publishing. After publishing your post, you can edit it at any time and your biography and social links would be below your blog articles. Looking forward to hearing from you passionate programmers.
+    </h5>
+    
+</div>
+
+
+
+
+
+{% endblock %}

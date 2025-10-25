@@ -1,0 +1,223 @@
+{% extends "portfolio/base-2.html" %}
+
+{% block cssStyle %}  
+.lighttag {
+  color: #e8f9fd !important;
+}
+{% endblock %}
+{% block content %}
+{% load static %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="direction:rtl !important; float:right; font-family: 'Sahel';">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="direction:rtl !important; float:right">
+                <h5 class="modal-title" id="exampleModalLabel" style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  نتایج پیش بینی:  </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="direction:rtl !important; float:right; text-align:justify;">
+                <h5 style="color:black; direction:rtl !important; float:right !important; font-family: 'Sahel'; text-align:justify;">  ورودی های طبقه بندی:  </h5><br><br>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> اسیدیته ثابت: <span id="fi" style="color:black;"></span></div>    
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> اسیدیته فرار: <span id="vo" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> اسید سیتریک: <span id="ci" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> قند باقیمانده: <span id="re" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> کلریدها: <span id="ch" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> دی اکسید گوگرد آزاد: <span id="fs" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> کل دی اکسید گوگرد: <span id="ts" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> چگالی: <span id="de" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;">pH: <span id="p_h" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> سولفات ها: <span id="su" style="color:black;"></span></div>
+                <div style="color:black; direction:rtl !important; float:right !important; text-align:justify;"> الکل: <span id="al" style="color:black;"></span></div>
+                <h5 class="pt-3">   نتیجه پیش بینی کیفیت شراب wine:  </h5> <br>
+                <div id="prediction" style="color:black;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                <a class="btn btn-primary" href="{% url 'ml:regressionresultpolynomialfa' %}" role="button">مشاهده نتایج قبلی</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h1 ></h1>-->
+
+<div class="container pt-3">
+    <div class="row justify-content-md-center">
+        <div class="col-md-12 ustify-content-md-center text-center">
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2 ">
+                <a href="{% url 'ml:regressionresultpolynomialfa' %}" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    نتایج </a>
+            </span> 
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/Wine_Quality.py" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                    کد نمونه </a>
+            </span>
+            
+            <span style="font-size:1.5rem; font-weight:600; " class="m-2">
+                <a href="https://github.com/mohammadijoo/Datasets/blob/main/Wine_Quality.csv" target="_blank" style="border-bottom: 1px solid #ffb766;" class="lighttag"> 
+                     دیتاست </a>
+            </span> <br>
+            
+        </div>
+        
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:3rem" class="text-center mt-4 mb-1">
+                پیش بینی کیفیت Wine
+            </h1>
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#A28089; font-size:2rem" class="text-center mb-4">
+                با استفاده از مدل <u>Polynomial Regression</u> 
+            </h1>
+            <h6 style="color: #00ABE4; font-size:0.8rem;" class="text-center mb-2">
+                پس از تکمیل و ارسال فرم، حداقل 10 ثانیه صبر کنید تا مدل نتایج را محاسبه نموده و نمایش دهد. <br> همچنین، تمام اعداد اعشاری وارد شده باید حداکثر 2 رقم اعشار داشته باشند، مانند: 1.23
+            </h6>
+            <form action="" id="post-form" style="color:white; direction:rtl !important; font-family: 'Sahel', 'BTraffic' !important;">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label   for="fixed_acidity" style="direction:rtl !important; text-align:justify; float:right"> اسیدیته ثابت <small class="pl-4" style="color:#BFA181;">  (بین 3.8 و 14.2)   </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="fixed_acidity" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="volatile_acidity" style="direction:rtl !important; text-align:justify; float:right"> اسیدیته فرار <small class="pl-4" style="color:#BFA181;">  (بین 0.08 و 1.1)  </small></label>
+                    <input type="number" step="0.01" class="form-control" id="volatile_acidity" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="citric_acid" style="direction:rtl !important; text-align:justify; float:right"> اسید سیتریک <small class="pl-4" style="color:#BFA181;">    (بین 0 و 1.66) </small></label>
+                    <input type="number" step="0.01" class="form-control" id="citric_acid" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="residual_sugar" style="direction:rtl !important; text-align:justify; float:right"> قند باقیمانده <small class="pl-4" style="color:#BFA181;">  (بین 0.6 و 65.8)   </small></label>
+                    <input type="number" step="0.01" class="form-control" id="residual_sugar" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="chlorides" style="direction:rtl !important; text-align:justify; float:right"> کلریدها <small class="pl-4" style="color:#BFA181;">  (بین 0.009 و 0.346)    </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="chlorides" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="free_sulfur_dioxide" style="direction:rtl !important; text-align:justify; float:right"> دی اکسید گوگرد آزاد <small class="pl-4" style="color:#BFA181;">  (بین 2 و 289)    </small> </label>
+                    <input type="number" step="0.01" class="form-control" id="free_sulfur_dioxide" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="total_sulfur_dioxide" style="direction:rtl !important; text-align:justify; float:right"> دی اکسید گوگرد کل <small class="pl-4" style="color:#BFA181;">  (بین 9 و 440)    </small></label>
+                    <input type="number" step="0.01" class="form-control" id="total_sulfur_dioxide" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="density" style="direction:rtl !important; text-align:justify; float:right"> چگالی <small class="pl-4" style="color:#BFA181;">  (بین 0.98711 و 1.03898)   </small></label>
+                    <input type="number" step="0.01" class="form-control" id="density" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="pH" style="direction:rtl !important; text-align:justify; float:right">pH <small class="pl-4" style="color:#BFA181;">   (بین 2.72 و 3.82)  </small></label>
+                    <input type="number" step="0.01" class="form-control" id="pH" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="sulphates" style="direction:rtl !important; text-align:justify; float:right"> سولفات ها <small class="pl-4" style="color:#BFA181;">    (بین 0.22 و 1.08)   </small></label>
+                    <input type="number" step="0.01" class="form-control" id="sulphates" placeholder="" required>
+                </div>
+                <div class="form-group">
+                    <label   for="alcohol" style="direction:rtl !important; text-align:justify; float:right"> الکل <small class="pl-4" style="color:#BFA181;">  (بین 8 و 14.2)   </small></label>
+                    <input type="number" step="0.01" class="form-control" id="alcohol" placeholder="" required>
+                </div>
+                <button type="submit" value="Submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">ارسال</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+        
+        
+        <div class="col-md-12 mt-5">
+            
+            <h1 style="font-family: 'Sahel', 'Caveat Brush', cursive; color:#99775C; font-size:2.5rem" class="text-justify mt-4 mb-1">
+                توضیحات مدل:
+            </h1>
+            
+            <p style="font-size:1.3rem" class="text-justify text-white">
+                
+                رگرسیون یک روش یادگیری ماشینی نظارت شده برای درک رابطه بین متغیرها یا ویژگی های مستقل و یک متغیر یا نتیجه وابسته است. یکی از الگوریتم هایی که برای رگرسیون استفاده می شود <a href="https://en.wikipedia.org/wiki/Polynomial_regression" target="_blank">“رگرسیون چند جمله ای”</a> است. <br>
+                
+                
+                در اینجا، ما از دیتاست <b style="color:#6E6E6E"><u>Wine_Quality.csv</u></b>   برای اهداف رگرسیونی استفاده می کنیم و می توانید این دیتاست را از لینک بالای این صفحه دانلود کنید. این دیتاست 11 متغیر ویژگی دارد: <br>
+                “<i style="color:#6ACFC7">اسیدیته ثابت</i>”, “<i style="color:#6ACFC7">اسیدیته فرار</i>”, “<i style="color:#6ACFC7">اسید سیتریک</i>”, “<i style="color:#6ACFC7">قند باقیمانده</i>”, 
+                “<i style="color:#6ACFC7">کلرایدها</i>”, “<i style="color:#6ACFC7">دی اکسید گوگرد آزاد</i>”, “<i style="color:#6ACFC7">دی اکسید گوگرد کل</i>”, 
+                “<i style="color:#6ACFC7">چگالی</i>”, “<i style="color:#6ACFC7">pH</i>”, “<i style="color:#6ACFC7">سولفات ها</i>” و “<i style="color:#6ACFC7">الکل</i>” <br>
+                و متغیر پیش بینی برابر است با: “<i style="color:#6ACFC7">کیفیت Wine</i>”. <br>
+            
+                در فرم بالا مقادیر 11 متغیر ویژگی را وارد کرده و مدل کیفیت Wine را در یک فرم پاپ آپ برمی گرداند. توجه داشته باشید که مقادیر و محدوده های هر متغیر ویژگی به شرح زیر است:  <br>
+            </p>
+                 
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">    اسیدیته ثابت (بین 3.8 و 14.2)   </mark></h5>                                 
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">     اسیدیته فرار (بین 0.08 و 1.1)    </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">      اسید سیتریک (بین 0 و 1.66)    </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">     قند باقیمانده (بین 0.6 و 65.8)    </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">     کلروایدها (بین 0.009 و 0.346)  </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">     دی اکسید گوگرد آزاد (بین 2 و 289)     </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">      دی اکسید گوگرد کل (بین 9 و 440)     </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">      چگالی (بین 0.98711 و 1.03898)  </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">     pH (بین 2.72 و 3.82)   </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">     سولفات ها (بین 0.22 و 1.08)     </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">      الکل (بین 8 و 14.2)   </mark></h5>
+                <h5 class="text-right mt-3"><mark class="mt-2 p-1" style="direction:rtl; font-family: 'Sahel', 'BTeraffic'; text-align:right;">    کیفیت شراب Wine (بین 3 و 9)     </mark></h5>
+                
+            <p style="font-size:1.3rem" class="text-justify text-white">
+                
+                کد نمونه مورد استفاده برای آموزش مدل "رگرسیون چند جمله ای" در لینک بالای همین صفحه ارائه شده است. هر بار که این فرم را اجرا می کنید و پیش بینی ها اتفاق می افتد، مقادیر در پایگاه داده ذخیره می شوند و با لینک "نتایج" در بالای این صفحه، نتایج قبلی پیش بینی مدل را مشاهده خواهید کرد. اجرای اخیر شما به انتهای این لیست اضافه خواهد شد.
+            
+            </p>
+            
+        </div>
+        
+        
+    </div>
+</div>
+
+
+<script>
+$(document).on('submit', '#post-form',function(e){
+    e.preventDefault();
+    $.ajax({
+        type:'POST',
+        url:'{% url "ml:submit_regression_polynomial" %}',
+        data:{
+            fixed_acidity:$('#fixed_acidity').val(),
+            volatile_acidity:$('#volatile_acidity').val(),
+            citric_acid:$('#citric_acid').val(),
+            residual_sugar:$('#residual_sugar').val(),
+            chlorides:$('#chlorides').val(),
+            free_sulfur_dioxide:$('#free_sulfur_dioxide').val(),
+            total_sulfur_dioxide:$('#total_sulfur_dioxide').val(),
+            density:$('#density').val(),
+            pH:$('#pH').val(),
+            sulphates:$('#sulphates').val(),
+            alcohol:$('#alcohol').val(),
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success:function(json) {
+            document.forms["post-form"].reset();
+            document.getElementById("prediction").innerHTML = json['result']
+            document.getElementById("fi").innerHTML = json['fixed_acidity']
+            document.getElementById("vo").innerHTML = json['volatile_acidity']
+            document.getElementById("ci").innerHTML = json['citric_acid']
+            document.getElementById("re").innerHTML = json['residual_sugar']
+            document.getElementById("ch").innerHTML = json['chlorides']
+            document.getElementById("fs").innerHTML = json['free_sulfur_dioxide']
+            document.getElementById("ts").innerHTML = json['total_sulfur_dioxide']
+            document.getElementById("de").innerHTML = json['density']
+            document.getElementById("p_h").innerHTML = json['pH']
+            document.getElementById("su").innerHTML = json['sulphates']
+            document.getElementById("al").innerHTML = json['alcohol']
+        },
+        error : function(xhr,errmsg,err) {
+
+        }
+    });
+})
+</script>
+
+
+{% endblock %}
+

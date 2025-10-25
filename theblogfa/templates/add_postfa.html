@@ -1,0 +1,74 @@
+{% extends 'portfolio/base.html' %}
+
+{% block title %} ایجاد پست جدید برای وبلاگ   {% endblock %}
+
+
+
+
+{% block cssStyle %}  
+
+textarea.form-control {
+  height: 20rem !important;
+}
+p, label, button {
+    text-align:right !important;
+}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container" style="direction:rtl; font-family: 'Sahel';">
+    <h1 style="font-family: 'Sahel';" class="text-center text-white mt-4 mb-4">
+        افزودن پست جدید بلاگ
+    </h1>
+    <br>
+    
+    {% if user.is_authenticated  %}
+    
+        {% if user.is_superuser or user.is_staff  %}
+    
+            <div class="form-group" style="direction:rtl; text-align:right">
+                <form method='POST' enctype="multipart/form-data" style="direction:rtl; text-align:right">
+                    {% csrf_token %}
+                    {{ form.media }}
+                    {{ form.as_p }}
+                    
+                    {% block  metaContent %}  {{ post.meta_tag }}  {% endblock %}
+                    
+                    <button class="btn btn-secondary text-right"> افزودن پست </button>
+                </form>
+                
+            </div>
+            
+            <script>
+                var name = "{{ user.id }}";
+                document.getElementById("abc").value = name; 
+                document.getElementById('id_title').placeholder = 'عنوان مقاله';
+                document.getElementById('id_title_tag').placeholder =  "عنوان تگ برای مرورگر";
+                document.getElementById('id_title_tag').value = "";
+                document.getElementById('id_meta_tag').placeholder = "کلمات کلیدی متا برای بهینه سازی موتورهای جستجو (با کاما از هم مجزا شود)";
+                document.getElementById('id_meta_tag').value = "";
+                document.getElementById('id_snippet').placeholder =  "خلاصه چند خطی مقاله جهت نمایش در صفحه اصلی لیست مقالات"  ;
+            </script>
+            
+        {% endif %}
+    
+    {% else %}
+    
+        <h1 class="text-white mt-4 mb-4"> 
+            شما مجاز به افزودن پست برای بلاگ نیستید.
+        </h1>
+    
+    {% endif %}
+    
+                
+</div>
+
+                
+
+
+
+{% endblock %}

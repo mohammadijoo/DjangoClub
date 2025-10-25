@@ -1,0 +1,12 @@
+User-agent: Googlebot
+Disallow:
+
+User-agent: *
+Disallow:
+
+User-agent: Googlebot-Image
+Disallow: 
+
+sitemap: https://django3.ir/sitemap.xml
+
+
